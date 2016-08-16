@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# basic support for bash scripts
+# TODO: replace with better argument parsing function
+
+_CODE=$2
+_INJECT=$6
+
+# TODO: do something with $_ENV
+# TODO: do something with $_SERVICE
+
+# echo "$_INJECT"
+# echo "$_CODE"
+eval "$_INJECT"
+eval "$_CODE"

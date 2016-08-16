@@ -1,0 +1,279 @@
+#!/usr/local/bin/node
+
+/*
+  Spawns a service as a child process
+  
+  Takes in a JavaScript microservice as a string over argv,
+  runs it using `run-service` module, and pipes results to STDOUT
+  
+  **Note: This script is intended to be run inside a chroot jail**
+  
+  Microservices are expected to take in two streams ( input / output )
+
+  In most cases these input / output streams will be http req / res.
+
+  HTTP Request Input <=> process.stdin
+  HTTP Response Output <=> process.stdout
+  
+  Arguments:
+
+    -c - The source code of the service
+    -s - Meta-data about the service
+    -e - The environment config to run the service in
+    -v - The virtual machine config to run the service in
+
+*/
+
+// TODO: make DNS punch configurable ( useful for dev )
+// Punch DNS lookup, because copying BIND and system resolver into the chroot is much files to copy, 
+// this uses node's built-in resolver ( perhaps c-ares ? )
+//var _dns=require('dns');
+//var dns = require('native-dns');
+//var net=require('net');
+//_dns.lookup = dns.lookup;
+
+// parse incoming command line arguments
+var argv = require('minimist')(process.argv.slice(2));
+
+if (typeof argv.c === "undefined" || argv.c.length === 0) {
+  console.log('Source code required. Please pass in -c option');
+  process.exit();
+}
+
+var code = argv.c;
+
+var request = require('hyperquest');
+
+var service = argv.s;
+
+try {
+  service = JSON.parse(service);
+} catch (err) {
+  service = {
+    "owner": "error"
+  };
+}
+
+// babel support for es6 / es7
+// the spawned child needs regenerator run-time here
+if (service.language === "babel" || service.language === "es7") {
+  // service is es6+, so convert it to normal javascript
+  // TODO: This may cause peformance issues, could be better to cache transpile of code or use updated node binary with flag
+  require("babel-polyfill");
+}
+
+var rs = require('run-service');
+var psr = require('parse-service-request');
+
+// create a new writable stream to wrap / handle STDOUT
+var Writable = require('stream').Writable;
+var output = Writable();
+
+// anytime output is written to, write the result to the command line
+output._write = function (chunk, enc, next) {
+  //console.log('writing chunk', chunk)
+  process.stdout.write(chunk);
+  //  console.log(chunk); // TODO: remove string?
+  next();
+};
+
+// TODO: move response mocking code to separate module
+// use STDERR as a channel for sending out of stream information ( like setting headers )
+output.addTrailers = function (headers) {
+  var message = {
+    "type": "addTrailers",
+    "payload": {
+      "headers": headers
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.removeHeader = function (name) {
+  var message = {
+    "type": "removeHeader",
+    "payload": {
+      "name": name
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.setHeader = function (name, value) {
+  var message = {
+    "type": "setHeader",
+    "payload": {
+      "name": name,
+      "value": value
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.setTimeout = function (msecs, cb) {
+  // TODO: add optional callback argument?
+  var message = {
+    "type": "setTimeout",
+    "payload": {
+      "msecs": msecs
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.sendDate = function (value) {
+  var message = {
+    "type": "sendDate",
+    "payload": {
+      "value": value
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.statusMessage = function (value) {
+  var message = {
+    "type": "statusMessage",
+    "payload": {
+      "value": value
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+// Using Object.defineProperty
+Object.defineProperty(output, 'statusCode', {
+  set: function(value) {
+    var message = {
+      "type": "statusCode",
+      "payload": {
+        "value": value
+      }
+    };
+    console.error(JSON.stringify(message));
+  }
+});
+
+output.writeContinue = function () {
+  var message = {
+    "type": "writeContinue",
+    "payload": {
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+output.writeHead = function (code, headers) {
+  var message = {
+    "type": "writeHead",
+    "payload": {
+      "code": code,
+      "headers": headers
+    }
+  };
+  console.error(JSON.stringify(message));
+};
+
+// Capture any stream errors
+output.on('error', function(err){
+  console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+  process.exit();
+});
+
+
+// When .json is called, exit the process with a JSON dump
+output.json = function json (data) {
+  if (typeof data !== 'undefined') {
+    console.log(JSON.stringify(data, true, 2));
+  }
+  console.error(JSON.stringify({ type: "end" }));
+  process.exit();
+};
+
+// When the response has been ended, exit the process
+output.end = function end (data) {
+  if (typeof data !== 'undefined') {
+    console.log(data);
+  }
+  console.error(JSON.stringify({ type: "end" }));
+  process.exit();
+};
+
+// Custom errorHandler for `run-service` execution
+function errorHandler (err) {
+  console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+  process.exit();
+};
+
+// parse the incoming service env from argv
+var env = JSON.parse(argv.e);
+
+// Map some familiar HTTP request information to input stream ( services need this data )
+process.stdin.method = env.input.method;
+process.stdin.path = env.input.path;
+process.stdin.params = env.input.params;
+process.stdin.headers = env.input.headers;
+process.stdin.host = env.input.host;
+process.stdin.url = env.input.url;
+process.stdin.connection = env.input.connection;
+process.stdin.resource = { params: {}};
+
+
+// Send logs to stderr as JSON message
+var debug = function debug () {
+  var args = [];
+  for (var a in arguments) {
+    args.push(arguments[a]);
+  }
+  if (args.length === 1) {
+    args = args[0];
+  }
+  console.error(JSON.stringify({ type: "log", payload: { entry: args } }));
+  return;
+};
+
+/* TODO: implement handlers for IPC messages
+// new IPC stdio[3] communication logic
+// sends IPC message to parent
+function _send (message) {
+  process.send(message);
+}
+process.on('message', function (m){
+  console.log('pmessage ' + JSON.stringify(m));
+});
+*/
+
+psr(process.stdin, output, function (req, res, fields){
+
+  for (var p in fields) {
+    env.params[p] = fields[p];
+  }
+
+  //console.log('ccc', code)
+  rs({
+    service: code,
+    env: {
+      req: req,
+      res: res,
+      env: env.env,
+      params: env.params,
+      resource: env.resource,
+      isStreaming: env.isStreaming,
+      customTimeout: env.customTimeout,
+      debug: debug
+    },
+    vm: {
+      console: {
+        log: debug,
+        error: debug
+      },
+      setTimeout: setTimeout,
+     __dirname: __dirname,
+     require: require,
+     Buffer: Buffer
+   },
+   errorHandler: errorHandler
+  })(function (err, result){
+    errorHandler(err);
+  });
+});

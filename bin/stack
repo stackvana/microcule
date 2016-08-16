@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+var stack = require('../');
+var http = require('resource-http');
+var config = require('../config');
+// parse incoming command line arguments
+var argv = require('minimist')(process.argv.slice(2));
+var script = argv._[0];
+
+config.SERVICE_MAX_TIMEOUT = argv.t ||  argv.timeout || config.SERVICE_MAX_TIMEOUT;
+config.http = config.http || {};
+config.http.host = argv.h ||  argv.host || config.http.host;
+config.http.port = argv.p ||  argv.port || config.http.port;
+config.watch = argv.w ||  argv.watch || config.watch;
+
+if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
+  console.log('1.0.0');
+  process.exit();
+}
+
+if (script === "help") {
+  showHelp();
+  process.exit();
+}
+
+if (typeof script === "undefined") {
+  console.log('path to script is a required argument');
+  showHelp();
+  process.exit();
+}
+
+// TODO: auto-detect based on extension and load language
+var path = require('path')
+var ext = path.extname(script);
+var extentions = {
+  ".js": "javascript",
+  ".coffee": "coffee-script",
+  ".lua": "lua",
+  ".php": "php",
+  ".pl": "perl",
+  ".py": "python", // Remark: You can also use the "--language python" option
+  ".py3": "python3", // Remark: You can also use the "--language python3" option
+  ".sh": "bash",
+  ".rb": "ruby",
+  ".tcl": "tcl",
+  ".ss": "scheme",
+  ".st": "smalltalk"
+};
+var targetLang = extentions[ext];
+var psr = require('parse-service-request');
+var requireService = require('../lib/requireService');
+
+if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
+  targetLang = argv.l || argv.language;
+}
+
+if (typeof targetLang === "undefined") {
+  console.log('Error: Language is not specified and could not be detected.')
+  console.log('Try using the --language option');
+  process.exit();
+}
+
+requireService({ path: process.cwd() + "/" + script, language: targetLang }, function (err, _script) {
+  if (err) {
+    throw err;
+  }
+  startServer(_script)
+});
+
+function showHelp () {
+  console.log('Usage: stack [command] [options] ./path/to/script.foo');
+  console.log(' ');
+  console.log('Commands:');
+  console.log(' ');
+  console.log('  help  Display help');
+  console.log(' ');
+  console.log('Options:');
+  console.log('  -t, --timeout <number>  Sets max timeout of service in milliseconds');
+  console.log('  -h, --host <value>      Host to listen on');
+  console.log('  -p, --port <number>     Port to listen on');
+  console.log('  -l, --language <value>  Target programming language');
+  console.log('  -w, --watch <bool>      Reloads source files on every request ( dev only )');
+  console.log('  -v, --version           Output the version number');
+}
+
+function startServer (_script) {
+  http.listen(config.http, function(err, app){
+    var addr = app.server.address();
+    console.log(targetLang + ' stack started at: http://' +  addr.address + ":" + addr.port);
+    config.env = process.env;
+    app.use(function (req, res, next) {
+      // Remark: If config.watch or argv is detected, reload the script on every request
+      // TODO: we could use an MD5 checksum or mtime to only reload the script on actual changes
+      if (config.watch === "true" || config.watch === true) {
+        requireService({ path: process.cwd() + "/" + script, language: targetLang }, function (err, __script) {
+          if (err) {
+            throw err;
+          }
+          spawnService(__script);
+        });
+      } else {
+        spawnService(_script)
+      }
+      function spawnService (code) {
+        stack.spawn({
+          code: code,
+          language: targetLang,
+          config: config
+        }, req, res);
+      }
+    });
+  });
+}
