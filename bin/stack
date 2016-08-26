@@ -106,7 +106,7 @@ function startServer (_script) {
           code: code,
           language: targetLang,
           config: config
-        }, req, res);
+        })(req, res);
       }
     });
   });
