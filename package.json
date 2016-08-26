@@ -16,6 +16,7 @@
     "url": "http://github.com/stackvana/stack.git"
   },
   "dependencies": {
+    "async": "^2.0.1",
     "hyperquest": "^2.0.0",
     "merge-params": "^1.1.0",
     "minimist": "^1.2.0",
