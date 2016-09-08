@@ -48,24 +48,24 @@ var extentions = {
 };
 var targetLang = extentions[ext];
 var psr = require('parse-service-request');
-var requireService = require('../lib/requireService');
+var requireServiceSync = require('../lib/requireServiceSync');
 
 if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
   targetLang = argv.l || argv.language;
 }
-
+/*  TODO: add targetLang
 if (typeof targetLang === "undefined") {
   console.log('Error: Language is not specified and could not be detected.')
   console.log('Try using the --language option');
   process.exit();
 }
+*/
 
-requireService({ path: process.cwd() + "/" + script, language: targetLang }, function (err, _script) {
-  if (err) {
-    throw err;
-  }
-  startServer(_script)
-});
+var servicePath = path.resolve(process.cwd() + "/" + script);
+//console.log('servicePath', servicePath);
+var _service = requireServiceSync({ path: servicePath });
+//console.log('_service', _service);
+startServer(_service);
 
 function showHelp () {
   console.log('Usage: stack [command] [options] ./path/to/script.foo');
@@ -83,30 +83,51 @@ function showHelp () {
   console.log('  -v, --version           Output the version number');
 }
 
-function startServer (_script) {
+function startServer (_service) {
   http.listen(config.http, function(err, app){
     var addr = app.server.address();
-    console.log(targetLang + ' stack started at: http://' +  addr.address + ":" + addr.port);
+    if (typeof _service.schema === "object") {
+      console.log('using schema for service. see: mschema for more details')
+      console.log(_service.schema);
+    }
+
+    if (_service.view && _service.view.length > 0 ) {
+      console.log('using view for service')
+    }
+
+    if (typeof _service.presenter === "function") {
+      console.log('using presenter for service')
+    }
+
+    console.log(_service.language + ' stack started at: http://' +  addr.address + ":" + addr.port);
+
     config.env = process.env;
     app.use(function (req, res, next) {
       // Remark: If config.watch or argv is detected, reload the script on every request
       // TODO: we could use an MD5 checksum or mtime to only reload the script on actual changes
       if (config.watch === "true" || config.watch === true) {
-        requireService({ path: process.cwd() + "/" + script, language: targetLang }, function (err, __script) {
+        // TODO: fix / add back the working async requireService method
+        /*
+        requireService({ path: process.cwd() + "/" + script, language: targetLang }, function (err, __service) {
           if (err) {
             throw err;
           }
-          spawnService(__script);
+          spawnService(__service);
         });
+        */
+        spawnService(requireServiceSync({ path: servicePath }));
       } else {
-        spawnService(_script)
+        spawnService(_service)
       }
-      function spawnService (code) {
+      function spawnService (service) {
         stack.spawn({
-          code: code,
-          language: targetLang,
+          code: service.code,
+          schema: service.schema,
+          view: service.view,
+          presenter: service.presenter,
+          language: service.language,
           config: config
-        })(req, res);
+        })(req, res, next);
       }
     });
   });
