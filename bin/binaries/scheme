@@ -1,4 +1,4 @@
-#!/usr/local/bin/scheme
+#!/usr/bin/env scheme
 
 ;;; It may look like this doesn't do anything yet...
 ;;; ...but for some reason the tinyscheme binary works by passing in -c as code
