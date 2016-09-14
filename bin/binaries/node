@@ -201,8 +201,10 @@ output.end = function end (data) {
 
 // Custom errorHandler for `run-service` execution
 function errorHandler (err) {
-  console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
-  process.exit();
+  if (err) {
+    console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+    process.exit();
+  }
 };
 
 // parse the incoming service env from argv
@@ -243,25 +245,54 @@ process.on('message', function (m){
 });
 */
 
+
+var serviceEnv = {};
+
+
+// Remark: serviceEnv object is used to populate the microservice object passed into your code
+// You may customize this file as you wish
+// I've added an if statement which hook.io uses for additional SDK and microservice helper methods
+if (env.isHookio) {
+
+  var sdk = require('hook.io-sdk');
+
+  var dev = {
+    host: "0.0.0.0",
+    port: 9999,
+    protocol: "http",
+    hook_private_key: env.hookAccessKey
+  }
+
+  serviceEnv.sdk = sdk;
+  var client = sdk.createClient(dev);
+  serviceEnv.client = client;
+  serviceEnv.datastore = client.datastore;
+  serviceEnv.fs = client.files;
+
+}
+
+function _require (module) {
+  return require(module);
+}
+
 psr(process.stdin, output, function (req, res, fields){
 
   for (var p in fields) {
     env.params[p] = fields[p];
   }
 
-  //console.log('ccc', code)
+  serviceEnv.req = req;
+  serviceEnv.res = res;
+  serviceEnv.env = env.env;
+  serviceEnv.params = env.params;
+  serviceEnv.resource = env.resource;
+  serviceEnv.isStreaming = env.isStreaming;
+  serviceEnv.customTimeout = env.customTimeout;
+  serviceEnv.debug = debug;
+
   rs({
     service: code,
-    env: {
-      req: req,
-      res: res,
-      env: env.env,
-      params: env.params,
-      resource: env.resource,
-      isStreaming: env.isStreaming,
-      customTimeout: env.customTimeout,
-      debug: debug
-    },
+    env: serviceEnv,
     vm: {
       console: {
         log: debug,
@@ -269,11 +300,15 @@ psr(process.stdin, output, function (req, res, fields){
       },
       setTimeout: setTimeout,
      __dirname: __dirname,
-     require: require,
+     require: _require,
      Buffer: Buffer
    },
    errorHandler: errorHandler
-  })(function (err, result){
-    errorHandler(err);
+  })(function (err, result) {
+    // callback / promise API
+    if (err) {
+      errorHandler(err);
+    }
+    res.end(result);
   });
 });
