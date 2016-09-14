@@ -29,42 +29,18 @@ if (typeof script === "undefined") {
   process.exit();
 }
 
-// TODO: auto-detect based on extension and load language
-var path = require('path')
-var ext = path.extname(script);
-var extentions = {
-  ".js": "javascript",
-  ".coffee": "coffee-script",
-  ".lua": "lua",
-  ".php": "php",
-  ".pl": "perl",
-  ".py": "python", // Remark: You can also use the "--language python" option
-  ".py3": "python3", // Remark: You can also use the "--language python3" option
-  ".sh": "bash",
-  ".rb": "ruby",
-  ".tcl": "tcl",
-  ".ss": "scheme",
-  ".st": "smalltalk"
-};
-var targetLang = extentions[ext];
+var path = require('path');
 var psr = require('parse-service-request');
 var requireServiceSync = require('../lib/requireServiceSync');
 
-if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
-  targetLang = argv.l || argv.language;
-}
-/*  TODO: add targetLang
-if (typeof targetLang === "undefined") {
-  console.log('Error: Language is not specified and could not be detected.')
-  console.log('Try using the --language option');
-  process.exit();
-}
-*/
-
 var servicePath = path.resolve(process.cwd() + "/" + script);
-//console.log('servicePath', servicePath);
 var _service = requireServiceSync({ path: servicePath });
-//console.log('_service', _service);
+
+// language override
+if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
+  _service.language = argv.l || argv.language;
+}
+
 startServer(_service);
 
 function showHelp () {
@@ -86,6 +62,7 @@ function showHelp () {
 function startServer (_service) {
   http.listen(config.http, function(err, app){
     var addr = app.server.address();
+
     if (typeof _service.schema === "object") {
       console.log('using schema for service. see: mschema for more details')
       console.log(_service.schema);
