@@ -275,14 +275,15 @@ function _require (module) {
   return require(module);
 }
 
-psr(process.stdin, output, function (req, res, fields){
+/*
+psr(process.stdin, output, function (req, res, fields) {
 
   for (var p in fields) {
     env.params[p] = fields[p];
   }
-
-  serviceEnv.req = req;
-  serviceEnv.res = res;
+*/
+  serviceEnv.req = process.stdin;
+  serviceEnv.res = output;
   serviceEnv.env = env.env;
   serviceEnv.params = env.params;
   serviceEnv.resource = env.resource;
@@ -311,4 +312,6 @@ psr(process.stdin, output, function (req, res, fields){
     }
     res.end(result);
   });
+  /*
 });
+*/
