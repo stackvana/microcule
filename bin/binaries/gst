@@ -1,4 +1,4 @@
-#!/usr/local/bin/gst
+#!/usr/bin/env gst
 
 array := Array new: 7.
 
