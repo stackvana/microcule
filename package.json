@@ -31,6 +31,8 @@
     "view": "^1.0.0"
   },
   "devDependencies": {
+    "express": "^4.14.0",
+    "request": "^2.75.0",
     "tape": "^4.6.0"
   }
 }
