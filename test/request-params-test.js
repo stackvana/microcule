@@ -1,5 +1,5 @@
 // basic-tests.js
-var tap = require("tape");
+var test = require("tape");
 var express = require('express');
 var request = require('request');
 
@@ -7,7 +7,7 @@ var stack, handler, app, server;
 
 stack = require('../');
 
-tap.test('attempt to start simple http server with spawn handler', function (t) {
+test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
   handler = stack.spawn({
     language: "javascript",
@@ -17,19 +17,19 @@ tap.test('attempt to start simple http server with spawn handler', function (t) 
   });
   app.use(handler);
   server = app.listen(3000, function () {
-    t.equal(typeof handler, "function", "returned HTTP middleware function")
-    t.end('created stack spawn handler');
+    t.equal(typeof handler, "function", "started HTTP microservice server");
+    t.end();
   });
 });
 
-tap.test('attempt to send simple http request to running microservice', function (t) {
+test('attempt to send simple http request to running microservice', function (t) {
   request('http://localhost:3000/', function (err, res, body) {
     t.equal(body, '{}\n', 'got correct response');
-    t.end('completed HTTP request');
+    t.end();
   })
 });
 
-tap.test('attempt to send JSON data to running microservice', function (t) {
+test('attempt to send JSON data to running microservice', function (t) {
   request({
     uri: 'http://localhost:3000/',
     method: "POST",
@@ -39,12 +39,13 @@ tap.test('attempt to send JSON data to running microservice', function (t) {
   }, function (err, res, body) {
     t.equal(typeof body, "object", 'got correct response');
     t.equal(body.a, "b", "echo'd back property")
-    t.end('completed HTTP request');
+    t.end();
   })
 });
 
-tap.test('attempt to end server', function (t) {
+test('attempt to end server', function (t) {
   server.close(function(){
-    t.end("server ended");
+    t.ok("server ended");
+    t.end();
   });
 });
