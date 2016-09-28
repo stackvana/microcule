@@ -1,6 +1,6 @@
 {
   "name": "stackvana",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "SDK and CLI for managing multi-language microservices",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "mustache": "^2.2.1",
     "parse-service-request": "1.2.x",
     "resource-http": "^1.1.0",
-    "run-service": "1.4.x",
+    "run-service": "2.x.x",
     "stream-buffers": "^3.0.1",
     "through2": "^2.0.1",
     "tree-kill": "^1.1.0",
