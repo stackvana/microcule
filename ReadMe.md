@@ -59,6 +59,12 @@ By default, `stack` will attempt to start a listening HTTP server based on a mic
 
     stack ./path/to/script.foo
 
+### 50+ Microservice Examples
+
+You can find many example microservices which can be run with stack here:
+
+https://github.com/Stackvana/microservice-examples
+
 #### CLI Examples
 
     stack ./examples/services/echo/echo.js
