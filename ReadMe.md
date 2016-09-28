@@ -1,4 +1,6 @@
-# Stack
+# Stack 
+
+<img src="https://travis-ci.org/Stackvana/stack.svg" alt="build:">
 
 Software Development Kit and Command Line Interface for spawning streaming HTTP [microservices](http://martinfowler.com/articles/microservices.html) in multiple programming languages.
 
