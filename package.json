@@ -1,6 +1,6 @@
 {
   "name": "stackvana",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "SDK and CLI for managing multi-language microservices",
   "main": "index.js",
   "scripts": {

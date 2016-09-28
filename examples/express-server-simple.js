@@ -4,8 +4,8 @@ var app = express();
 
 var nodeService = function testService (opts) {
   var res = opts.res;
-  res.write('hello node!');
-  res.end();
+  console.log('logging to console');
+  res.json(opts.params);
 };
 
 var handler = stack.spawn({
