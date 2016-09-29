@@ -14,7 +14,8 @@ config.http.port = argv.p ||  argv.port || config.http.port;
 config.watch = argv.w ||  argv.watch || config.watch;
 
 if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
-  console.log('1.0.0');
+  var pkg = require('../package.json')
+  console.log(pkg.version)
   process.exit();
 }
 
