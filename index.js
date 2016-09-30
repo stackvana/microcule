@@ -9,7 +9,8 @@ stack.requireServiceSync = require('./lib/requireServiceSync');
 stack.plugins = {
   "bodyParser": require('./lib/plugins/bodyParser'),
   "logger": require('./lib/plugins/logger'),
-  "mschema": require('./lib/plugins/mschema')
+  "mschema": require('./lib/plugins/mschema'),
+  "viewPresenter": require('./lib/plugins/viewPresenter')
 };
 
 module.exports = stack;

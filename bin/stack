@@ -91,14 +91,13 @@ function startServer (_service) {
       app.use(mschema(_service.schema));
     }
 
-    /*
     if (_service.view) {
       app.use(viewPresenter({
         view: _service.view,
         presenter: _service.presenter
       }));
     }
-    */
+
     app.use(function watchSpawn (req, res, next) {
       // Remark: If config.watch or argv is detected, reload the script on every request
       // TODO: we could use an MD5 checksum or mtime to only reload the script on actual changes
