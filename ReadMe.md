@@ -16,6 +16,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `stack` binary for starting HTTP microservice servers
+ - Plugin System based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
  - Uses a "system process per microservice request" design
  - Isolates state of microservice per system process and request ( stateless service requests )
@@ -192,6 +193,55 @@ npm install babel-preset-es2015
 npm install babel-preset-stage-3
 npm install then-sleep
 ```
+
+## Plugins
+
+`stack` can be extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin in any existing Node application.
+
+### Creating a custom plugin
+
+
+`custom-logger.js`
+
+``` js
+module.exports = function loggerMiddleware (config) {
+  // here the function handler can be configured based on a `config` object
+  return function loggerHandler (req, res, next) {
+    console.log('running service ' + req.url);
+    next();
+  }
+}
+```
+
+Once you've created a new plugin, simply `require()` it, and call `app.use(customLogger({}))`. That's it! There are no magic or surprises with how plugins work in `stack`.
+
+`server.js`
+
+```js
+var stack = require('stackvana');
+var express = require('express');
+var app = express();
+
+var nodeService = function testService (opts) {
+  var res = opts.res;
+  res.json(opts.params);
+};
+
+var logger = require('../lib/plugins/custom-logger');
+var handler = stack.spawn({
+  code: nodeService,
+  language: "javascript"
+});
+
+app.use(logger());
+app.use(handler);
+
+app.listen(3000, function () {
+  console.log('server started on port 3000');
+});
+
+```
+
 
 ## Security
 
