@@ -10,6 +10,7 @@ stack.plugins = {
   "bodyParser": require('./lib/plugins/bodyParser'),
   "logger": require('./lib/plugins/logger'),
   "mschema": require('./lib/plugins/mschema'),
+  "rateLimiter": require('./lib/plugins/rateLimiter'),
   "viewPresenter": require('./lib/plugins/viewPresenter')
 };
 
