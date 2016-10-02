@@ -122,7 +122,8 @@ Hook Object API
 
 ### Example services
 
-see: `./examples/services` for more details
+see: `./examples/services` for some examples
+see: [microservice-examples](https://github.com/Stackvana/microservice-examples) for 50+ examples
 
 ```js
 var stack = require('stackvana');
@@ -178,28 +179,21 @@ If you look at the `./examples/simple-http-server` file, you will see that `spaw
 
 *Additional language support is both planned and welcomed. Please open a Pull Request if you wish to see a specific language added*
 
-<a name="babel"></a>
-
-## Babel
-
-In order to run Babel / ES6 / ES7 microservices, you must install the following packages:
-
-```
-npm install babel-core
-npm install babel-plugin-syntax-async-functions
-npm install babel-plugin-transform-regenerator
-npm install babel-polyfill
-npm install babel-preset-es2015
-npm install babel-preset-stage-3
-npm install then-sleep
-```
-
 ## Plugins
 
-`stack` can be extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin in any existing Node application.
+`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
+
+**Available Plugins**
+
+- **logger** - Basic extendable request / response logger function 
+- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
+- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
+- **viewPresenter** - Adds View-Presenter with server-side DOM using [view](https://github.com/bigcompany/view) library 
+
+
 
 ### Creating a custom plugin
-
 
 `custom-logger.js`
 
@@ -242,7 +236,6 @@ app.listen(3000, function () {
 
 ```
 
-
 ## Security
 
 Running untrusted microservice code in a safe way is a complex problem. The `stack` module is only intended to isolate a small part of the entire untrusted source code execution chain.
@@ -273,6 +266,27 @@ All errors that can possibly happen during the execution of a microservice shoul
 To ensure isolation of the server file-system, you would want to use the `stack` binary in a `chroot` jail, or another similar container solution.
 
 To ensure isolation of the server memory and cpu, you will want to use the `stack` binary in a virtualized environment capable of monitoring and managing resource usage per process.
+
+<a name="babel"></a>
+
+## Babel
+
+In order to run Babel / ES6 / ES7 microservices, you must install the following packages:
+
+```bash
+npm install babel-core@6.16.0
+npm install babel-plugin-syntax-async-functions@6.13.0
+npm install babel-plugin-transform-regenerator@6.16.1"
+npm install babel-polyfill@6.16.0"
+npm install babel-preset-es2015@6.16.0"
+npm install babel-preset-stage-3"@6.16.0"
+```
+
+### Who is Using Stack
+
+<a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>
+
+*Is your business using Stack in production? Let us know by opening a pull request with your company's logo and website.*
 
 ### Credits
 
