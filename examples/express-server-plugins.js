@@ -5,9 +5,10 @@ var app = express();
 var nodeService = function testService (opts) {
   var res = opts.res;
   // console.log('logging to console');
-  res.json(opts.params);
+  setTimeout(function(){
+    res.json({});
+  }, 400);
 };
-
 
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
@@ -27,8 +28,17 @@ app.use(mschema({
     "required": true
   }
 }));
-
+app.use(rateLimiter({
+  maxLimit: 1000,
+  maxConcurrency: 2
+}));
 app.use(handler);
+app.use(function(req, res, next){
+  // Note: It's most likely you will not be able to call res.end or res.write here,
+  // as the stack.spawn handler should end the response
+  // Any middlewares places after stack.spawn should be considered "post processing" logic
+  console.log('post process service');
+})
 
 app.listen(3000, function () {
   console.log('server started on port 3000');
