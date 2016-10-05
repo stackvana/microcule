@@ -67,7 +67,6 @@ You can find many example microservices which can be run with stack here:
 https://github.com/Stackvana/microservice-examples
 
 #### CLI Examples
-
     stack ./examples/services/echo/echo.js
     stack -l babel ./examples/services/echo/echo-es6-async.js
     stack ./examples/services/echo/echo.sh
@@ -267,6 +266,16 @@ To ensure isolation of the server file-system, you would want to use the `stack`
 
 To ensure isolation of the server memory and cpu, you will want to use the `stack` binary in a virtualized environment capable of monitoring and managing resource usage per process.
 
+<a name="coffee-script"></a>
+
+## Coffee-Script
+
+In order to Coffee-Script based microservices, you must install the following packages:
+
+```bash
+npm install coffee-script
+```
+
 <a name="babel"></a>
 
 ## Babel
@@ -276,10 +285,10 @@ In order to run Babel / ES6 / ES7 microservices, you must install the following 
 ```bash
 npm install babel-core@6.16.0
 npm install babel-plugin-syntax-async-functions@6.13.0
-npm install babel-plugin-transform-regenerator@6.16.1"
-npm install babel-polyfill@6.16.0"
-npm install babel-preset-es2015@6.16.0"
-npm install babel-preset-stage-3"@6.16.0"
+npm install babel-plugin-transform-regenerator@6.16.1
+npm install babel-polyfill@6.16.0
+npm install babel-preset-es2015@6.16.0
+npm install babel-preset-stage-3@6.16.0
 ```
 
 ### Who is Using Stack
