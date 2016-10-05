@@ -8,7 +8,7 @@ At it's core, `stack` maps HTTP request/response streams to the STDIN/STDOUT str
 
 ## Introduction
 
-This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and 100+ million microservice deployments.
+This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and it's largest installation is now managing 8000+ microservices.
 
 You are encouraged to use this module as-is, or modify it to suite your needs. If you are interested in contributing please let us know by opening a Pull Request.
 
@@ -59,6 +59,22 @@ By default, `stack` will attempt to start a listening HTTP server based on a mic
 ### As Command Line Interface
 
     stack ./path/to/script.foo
+
+<a name="plugins"></a>
+## Plugins
+
+`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
+
+**Available Plugins**
+
+- **logger** - Basic extendable request / response logger function 
+- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
+- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
+
+For Express based plugins example, see: `./examples/express-plugins.js`
+
+Since plugins are standard Node.js middlewares, writing [custom plugins](#customPlugins) is very easy.
 
 ### 50+ Microservice Examples
 
@@ -121,33 +137,31 @@ Hook Object API
 
 ### Example services
 
-see: `./examples/services` for some examples
+see: `./examples/services` for more examples
 see: [microservice-examples](https://github.com/Stackvana/microservice-examples) for 50+ examples
+
+`express-simple.js`
 
 ```js
 var stack = require('stackvana');
-var http = require('http');
+var express = require('express');
+var app = express();
 
-var bashService = 'echo "hello bash"';
-var pythonService = 'print "hello python"';
 var nodeService = function testService (opts) {
   var res = opts.res;
-  res.write('hello node!');
-  res.end();
+  console.log('logging to console');
+  res.json(opts.params);
 };
 
-var server = http.createServer(function(req, res){
-  stack.spawn({
-    code: nodeService,
-    language: "javascript"
-  }, req, res);
-  // or you could use bash / any other supported language
-  // stack.spawn({code: bashService, language: "bash" }, req, res);
-  // stack.spawn({code: pythonService, language: "python" }, req, res);
-  
+var handler = stack.spawn({
+  code: nodeService,
+  language: "javascript"
 });
-server.listen(3000, function () {
-  console.log('http server started on port 3000');
+
+app.use(handler);
+
+app.listen(3000, function () {
+  console.log('server started on port 3000');
 });
 
 ```
@@ -180,18 +194,7 @@ You can also stack multiple `express` apps together for multiple microservices w
 
 *Additional language support is both planned and welcomed. Please open a Pull Request if you wish to see a specific language added*
 
-<a name="plugins"></a>
-## Plugins
-
-`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
-
-**Available Plugins**
-
-- **logger** - Basic extendable request / response logger function 
-- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
-- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
-- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
-
+<a name="customPlugins"></a>
 
 ### Creating a custom plugin
 
@@ -211,32 +214,7 @@ module.exports = function loggerMiddleware (config) {
 
 Once you've created a new plugin, simply `require()` it, and call `app.use(customLogger({}))`. That's it! There are no magic or surprises with how plugins work in `stack`.
 
-`server.js`
-
-```js
-var stack = require('stackvana');
-var express = require('express');
-var app = express();
-
-var nodeService = function testService (opts) {
-  var res = opts.res;
-  res.json(opts.params);
-};
-
-var logger = require('./lib/plugins/logger');
-var handler = stack.spawn({
-  code: nodeService,
-  language: "javascript"
-});
-
-app.use(logger());
-app.use(handler);
-
-app.listen(3000, function () {
-  console.log('server started on port 3000');
-});
-
-```
+See: `./examples/express-plugins.js` for more details.
 
 ## Security
 
