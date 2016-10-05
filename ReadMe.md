@@ -16,7 +16,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `stack` binary for starting HTTP microservice servers
- - Plugin System based on standard node.js HTTP middlewares
+ - [Plugin System](#plugins) based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
  - Uses a "system process per microservice request" design
  - Isolates state of microservice per system process and request ( stateless service requests )
@@ -154,11 +154,13 @@ server.listen(3000, function () {
 
 ## Multiple Microservices Per Server Instance
 
-In some configurations you may want to safetly run multiple kinds of microservices on one server instance ( a small monolith ). `stack` is designed exactly for this use case.
+In some configurations you may want to safely run multiple kinds of microservices on one server instance ( a small monolith ). `stack` is designed exactly for this use case.
 
 Since every incoming service request will spawn a separate process, `stack` can safely and easily handle spawning multiple types of microservices at once without affecting the state of other services.
 
-If you look at the `./examples/simple-http-server` file, you will see that `spawn()` can be used as a standard Node.js or Express HTTP middleware. For multiple services per server, simply map the `spawn()` method to any custom routes you may want to define.
+If you look at the `./examples/http-server-simple.js` file, you will see that `spawn()` can be used as a standard Node.js or Express HTTP middleware. For multiple services per server, simply map the `spawn()` method to any custom routes you may want to define.
+
+You can also stack multiple `express` apps together for multiple microservices with separate routes. see: `./examples/express-multi-language.js`
 
 ### Supports Microservices In Many Languages
 
@@ -178,9 +180,10 @@ If you look at the `./examples/simple-http-server` file, you will see that `spaw
 
 *Additional language support is both planned and welcomed. Please open a Pull Request if you wish to see a specific language added*
 
+<a name="plugins"></a>
 ## Plugins
 
-`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
+`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
 
 **Available Plugins**
 
@@ -191,6 +194,8 @@ If you look at the `./examples/simple-http-server` file, you will see that `spaw
 
 
 ### Creating a custom plugin
+
+Creating a custom plugin is very simple. Just code the stack plugin the same you would any other Node.js middleware. Feel free to use any of the other existing HTTP middlewares in the Node.js ecosystem. 
 
 `custom-logger.js`
 
@@ -218,7 +223,7 @@ var nodeService = function testService (opts) {
   res.json(opts.params);
 };
 
-var logger = require('../lib/plugins/custom-logger');
+var logger = require('./lib/plugins/logger');
 var handler = stack.spawn({
   code: nodeService,
   language: "javascript"
