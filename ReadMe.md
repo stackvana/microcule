@@ -16,6 +16,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `stack` binary for starting HTTP microservice servers
+ - [Plugin System](#plugins) based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
  - Uses a "system process per microservice request" design
  - Isolates state of microservice per system process and request ( stateless service requests )
@@ -66,7 +67,6 @@ You can find many example microservices which can be run with stack here:
 https://github.com/Stackvana/microservice-examples
 
 #### CLI Examples
-
     stack ./examples/services/echo/echo.js
     stack -l babel ./examples/services/echo/echo-es6-async.js
     stack ./examples/services/echo/echo.sh
@@ -121,7 +121,8 @@ Hook Object API
 
 ### Example services
 
-see: `./examples/services` for more details
+see: `./examples/services` for some examples
+see: [microservice-examples](https://github.com/Stackvana/microservice-examples) for 50+ examples
 
 ```js
 var stack = require('stackvana');
@@ -153,11 +154,13 @@ server.listen(3000, function () {
 
 ## Multiple Microservices Per Server Instance
 
-In some configurations you may want to safetly run multiple kinds of microservices on one server instance ( a small monolith ). `stack` is designed exactly for this use case.
+In some configurations you may want to safely run multiple kinds of microservices on one server instance ( a small monolith ). `stack` is designed exactly for this use case.
 
 Since every incoming service request will spawn a separate process, `stack` can safely and easily handle spawning multiple types of microservices at once without affecting the state of other services.
 
-If you look at the `./examples/simple-http-server` file, you will see that `spawn()` can be used as a standard Node.js or Express HTTP middleware. For multiple services per server, simply map the `spawn()` method to any custom routes you may want to define.
+If you look at the `./examples/http-server-simple.js` file, you will see that `spawn()` can be used as a standard Node.js or Express HTTP middleware. For multiple services per server, simply map the `spawn()` method to any custom routes you may want to define.
+
+You can also stack multiple `express` apps together for multiple microservices with separate routes. see: `./examples/express-multi-language.js`
 
 ### Supports Microservices In Many Languages
 
@@ -177,20 +180,62 @@ If you look at the `./examples/simple-http-server` file, you will see that `spaw
 
 *Additional language support is both planned and welcomed. Please open a Pull Request if you wish to see a specific language added*
 
-<a name="babel"></a>
+<a name="plugins"></a>
+## Plugins
 
-## Babel
+`stack` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `stack` plugin, or re-use any `stack` plugin as a middleware in any existing Node application.
 
-In order to run Babel / ES6 / ES7 microservices, you must install the following packages:
+**Available Plugins**
 
+- **logger** - Basic extendable request / response logger function 
+- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
+- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
+
+
+### Creating a custom plugin
+
+Creating a custom plugin is very simple. Just code the stack plugin the same you would any other Node.js middleware. Feel free to use any of the other existing HTTP middlewares in the Node.js ecosystem. 
+
+`custom-logger.js`
+
+``` js
+module.exports = function loggerMiddleware (config) {
+  // here the function handler can be configured based on a `config` object
+  return function loggerHandler (req, res, next) {
+    console.log('running service ' + req.url);
+    next();
+  }
+}
 ```
-npm install babel-core
-npm install babel-plugin-syntax-async-functions
-npm install babel-plugin-transform-regenerator
-npm install babel-polyfill
-npm install babel-preset-es2015
-npm install babel-preset-stage-3
-npm install then-sleep
+
+Once you've created a new plugin, simply `require()` it, and call `app.use(customLogger({}))`. That's it! There are no magic or surprises with how plugins work in `stack`.
+
+`server.js`
+
+```js
+var stack = require('stackvana');
+var express = require('express');
+var app = express();
+
+var nodeService = function testService (opts) {
+  var res = opts.res;
+  res.json(opts.params);
+};
+
+var logger = require('./lib/plugins/logger');
+var handler = stack.spawn({
+  code: nodeService,
+  language: "javascript"
+});
+
+app.use(logger());
+app.use(handler);
+
+app.listen(3000, function () {
+  console.log('server started on port 3000');
+});
+
 ```
 
 ## Security
@@ -223,6 +268,37 @@ All errors that can possibly happen during the execution of a microservice shoul
 To ensure isolation of the server file-system, you would want to use the `stack` binary in a `chroot` jail, or another similar container solution.
 
 To ensure isolation of the server memory and cpu, you will want to use the `stack` binary in a virtualized environment capable of monitoring and managing resource usage per process.
+
+<a name="coffee-script"></a>
+
+## Coffee-Script
+
+In order to Coffee-Script based microservices, you must install the following packages:
+
+```bash
+npm install coffee-script
+```
+
+<a name="babel"></a>
+
+## Babel
+
+In order to run Babel / ES6 / ES7 microservices, you must install the following packages:
+
+```bash
+npm install babel-core@6.16.0
+npm install babel-plugin-syntax-async-functions@6.13.0
+npm install babel-plugin-transform-regenerator@6.16.1
+npm install babel-polyfill@6.16.0
+npm install babel-preset-es2015@6.16.0
+npm install babel-preset-stage-3@6.16.0
+```
+
+### Who is Using Stack
+
+<a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>
+
+*Is your business using Stack in production? Let us know by opening a pull request with your company's logo and website.*
 
 ### Credits
 

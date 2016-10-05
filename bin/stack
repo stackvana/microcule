@@ -31,8 +31,12 @@ if (typeof script === "undefined") {
 }
 
 var path = require('path');
-var psr = require('parse-service-request');
 var requireServiceSync = require('../lib/requireServiceSync');
+
+var logger = require('../lib/plugins/logger');
+var mschema = require('../lib/plugins/mschema');
+var bodyParser = require('../lib/plugins/bodyParser');
+var viewPresenter = require('../lib/plugins/viewPresenter');
 
 var servicePath = path.resolve(process.cwd() + "/" + script);
 var _service = requireServiceSync({ path: servicePath });
@@ -80,7 +84,22 @@ function startServer (_service) {
     console.log(_service.language + ' stack started at: http://' +  addr.address + ":" + addr.port);
 
     config.env = process.env;
-    app.use(function (req, res, next) {
+
+    app.use(logger());
+    app.use(bodyParser());
+
+    if (_service.schema) {
+      app.use(mschema(_service.schema));
+    }
+
+    if (_service.view) {
+      app.use(viewPresenter({
+        view: _service.view,
+        presenter: _service.presenter
+      }));
+    }
+
+    app.use(function watchSpawn (req, res, next) {
       // Remark: If config.watch or argv is detected, reload the script on every request
       // TODO: we could use an MD5 checksum or mtime to only reload the script on actual changes
       if (config.watch === "true" || config.watch === true) {

@@ -26,3 +26,6 @@ node http-server-simple.js
 
 These examples show how to use `stack` as an HTTP middleware in Express or any standard Node.js HTTP server.
 
+## 50+ Microservice Examples using Stack
+
+see: https://github.com/Stackvana/microservice-examples

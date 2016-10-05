@@ -282,36 +282,33 @@ psr(process.stdin, output, function (req, res, fields) {
     env.params[p] = fields[p];
   }
 */
-  serviceEnv.req = process.stdin;
-  serviceEnv.res = output;
-  serviceEnv.env = env.env;
-  serviceEnv.params = env.params;
-  serviceEnv.resource = env.resource;
-  serviceEnv.isStreaming = env.isStreaming;
-  serviceEnv.customTimeout = env.customTimeout;
-  serviceEnv.debug = debug;
+serviceEnv.req = process.stdin;
+serviceEnv.res = output;
+serviceEnv.env = env.env;
+serviceEnv.params = env.params;
+serviceEnv.resource = env.resource;
+serviceEnv.isStreaming = env.isStreaming;
+serviceEnv.customTimeout = env.customTimeout;
+serviceEnv.debug = debug;
 
-  rs({
-    service: code,
-    env: serviceEnv,
-    vm: {
-      console: {
-        log: debug,
-        error: debug
-      },
-      setTimeout: setTimeout,
-     __dirname: __dirname,
-     require: _require,
-     Buffer: Buffer
-   },
-   errorHandler: errorHandler
-  })(function (err, result) {
-    // callback / promise API
-    if (err) {
-      errorHandler(err);
-    }
-    res.end(result);
-  });
-  /*
+rs({
+  service: code,
+  env: serviceEnv,
+  vm: {
+    console: {
+      log: debug,
+      error: debug
+    },
+    setTimeout: setTimeout,
+   __dirname: __dirname,
+   require: _require,
+   Buffer: Buffer
+ },
+ errorHandler: errorHandler
+})(function (err, result) {
+  // callback / promise API
+  if (err) {
+    errorHandler(err);
+  }
+  output.end(result);
 });
-*/

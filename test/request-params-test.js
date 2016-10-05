@@ -15,6 +15,7 @@ test('attempt to start simple http server with spawn handler', function (t) {
       service.res.json(service.params);
     }
   });
+  app.use(stack.plugins.bodyParser());
   app.use(handler);
   server = app.listen(3000, function () {
     t.equal(typeof handler, "function", "started HTTP microservice server");
