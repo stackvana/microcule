@@ -19,8 +19,8 @@ The `stack` CLI spawns an HTTP server bound to the service argument.
 If you wish to create a custom HTTP server, you can run any of the following examples:
 
 ```
-node express-server-full.js
-node express-server-simple.js
+node express-plugins.js
+node express-simple.js
 node http-server-simple.js
 ```
 
