@@ -33,7 +33,7 @@
   "devDependencies": {
     "express": "^4.14.0",
     "request": "^2.75.0",
-    "microservice-examples": "3.0.0"
+    "microservice-examples": "3.0.0",
     "tape": "^4.6.0"
   }
 }
