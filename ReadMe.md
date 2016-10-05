@@ -188,8 +188,6 @@ If you look at the `./examples/simple-http-server` file, you will see that `spaw
 - **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
 - **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
 - **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
-- **viewPresenter** - Adds View-Presenter with server-side DOM using [view](https://github.com/bigcompany/view) library 
-
 
 
 ### Creating a custom plugin
