@@ -6,6 +6,8 @@ Software Development Kit and Command Line Interface for spawning streaming HTTP 
 
 At it's core, `stack` maps HTTP request/response streams to the STDIN/STDOUT streams of any programming language binary.
 
+If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `stack` a very interesting option to remove your dependency on third-party cloud providers. `stack` allows for local deployment of enterprise ready microservices. `stack` has few dependencies and will run anywhere Node.js can run.
+
 ## Introduction
 
 This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and it's largest installation is now managing 8000+ microservices.
