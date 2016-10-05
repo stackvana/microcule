@@ -310,7 +310,7 @@ psr(process.stdin, output, function (req, res, fields) {
     if (err) {
       errorHandler(err);
     }
-    res.end(result);
+    output.end(result);
   });
   /*
 });
