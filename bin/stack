@@ -121,7 +121,7 @@ function startServer (_service) {
             if (err) {
               return next(err);
             }
-            stack.spawn({
+            stack.plugins.spawn({
               code: service.code,
               schema: service.schema,
               view: service.view,
@@ -131,7 +131,7 @@ function startServer (_service) {
             })(req, output, next);
           });
         } else {
-          stack.spawn({
+          stack.plugins.spawn({
             code: service.code,
             schema: service.schema,
             view: service.view,
