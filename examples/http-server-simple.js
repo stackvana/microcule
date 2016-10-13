@@ -7,7 +7,7 @@ var service = function testService (opts) {
 };
 
 /* could also be bash or any supported language */
-var handler = stack.spawn({
+var handler = stack.plugins.spawn({
   code: service,
   language: "javascript"
 });

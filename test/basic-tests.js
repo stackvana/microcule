@@ -12,7 +12,7 @@ test('attempt to require stack', function (t) {
 });
 
 test('attempt to create microservice spawn handler', function (t) {
-  handler = stack.spawn({
+  handler = stack.plugins.spawn({
     language: "bash",
     code: 'echo "hello world"'
   });

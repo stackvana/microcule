@@ -7,8 +7,9 @@ var mschema = require('../lib/plugins/mschema');
 var bodyParser = require('../lib/plugins/bodyParser');
 var sourceGithubGist = require('../lib/plugins/sourceGithubGist');
 var sourceGithubRepo = require('../lib/plugins/sourceGithubRepo');
+var spawn = require('../lib/plugins/spawn');
 
-var handler = stack.spawn({
+var handler = spawn({
   // code: nodeService,
   language: "javascript"
 });
@@ -32,8 +33,8 @@ app.use(mschema({
 app.use(handler);
 app.use(function(req, res, next){
   // Note: It's most likely you will not be able to call res.end or res.write here,
-  // as the stack.spawn handler should end the response
-  // Any middlewares places after stack.spawn should be considered "post processing" logic
+  // as the stack.plugins.spawn handler should end the response
+  // Any middlewares places after stack.plugins.spawn should be considered "post processing" logic
   console.log('post process service');
 })
 

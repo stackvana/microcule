@@ -41,7 +41,7 @@ test('attempt to start server with handlers for all languages', function (t) {
   app.use(stack.plugins.bodyParser());
   languages.forEach(function (lang) {
     var service = examples.services[lang + '-hello-world'];
-    var handler = stack.spawn({
+    var handler = stack.plugins.spawn({
       language: lang,
       code: service.code
     });

@@ -16,7 +16,7 @@ nodeService.use(plugins.rateLimiter({
   maxLimit: 1000,
   maxConcurrency: 2
 }));
-nodeService.use(stack.spawn({
+nodeService.use(plugins.spawn({
   code: function testService (opts) {
     var res = opts.res;
     res.write('hello node!');
@@ -39,7 +39,7 @@ bashService.use(plugins.rateLimiter({
   maxLimit: 1000,
   maxConcurrency: 2
 }));
-bashService.use(stack.spawn({
+bashService.use(plugins.spawn({
   code: 'echo "hello world"',
   language: "bash"
 }))

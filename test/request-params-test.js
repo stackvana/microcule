@@ -9,7 +9,7 @@ stack = require('../');
 
 test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
-  handler = stack.spawn({
+  handler = stack.plugins.spawn({
     language: "javascript",
     code: function service (service) {
       service.res.json(service.params);

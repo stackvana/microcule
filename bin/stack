@@ -36,7 +36,7 @@ var requireServiceSync = require('../lib/requireServiceSync');
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
 var bodyParser = require('../lib/plugins/bodyParser');
-var viewPresenter = require('../lib/plugins/viewPresenter');
+// var viewPresenter = require('../lib/plugins/viewPresenter');
 
 var servicePath = path.resolve(process.cwd() + "/" + script);
 var _service = requireServiceSync({ path: servicePath });
@@ -117,7 +117,7 @@ function startServer (_service) {
         spawnService(_service)
       }
       function spawnService (service) {
-        stack.spawn({
+        stack.plugins.spawn({
           code: service.code,
           schema: service.schema,
           view: service.view,
