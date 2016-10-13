@@ -9,7 +9,9 @@ stack.plugins = {
   "bodyParser": require('./lib/plugins/bodyParser'),
   "logger": require('./lib/plugins/logger'),
   "mschema": require('./lib/plugins/mschema'),
-  "rateLimiter": require('./lib/plugins/rateLimiter')
+  "rateLimiter": require('./lib/plugins/rateLimiter'),
+  "sourceGithubGist": require('./lib/plugins/sourceGithubGist'),
+  "sourceGithubRepo": require('./lib/plugins/sourceGithubRepo')
 };
 
 module.exports = stack;

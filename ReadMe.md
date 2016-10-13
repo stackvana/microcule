@@ -69,9 +69,11 @@ By default, `stack` will attempt to start a listening HTTP server based on a mic
 
 **Available Plugins**
 
+- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
 - **logger** - Basic extendable request / response logger function 
 - **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
-- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **sourceGithubGist** - Pulls microservice source code from a Github Gist
+- **sourceGithubRepo** - Pulls microservice source code from a Github Repository
 - **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
 
 For Express based plugins example, see: `./examples/express-plugins.js`
