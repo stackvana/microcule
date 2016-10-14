@@ -20,7 +20,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `microcule` binary for starting HTTP microservice servers
- - Only require microservice functionality you need
+ - Modular design, only require the microservice functionality you need
  - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
  - Uses a "system process per microservice request" design
