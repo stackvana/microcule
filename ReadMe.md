@@ -10,7 +10,7 @@ At it's core, `microcule` maps HTTP request/response streams to the STDIN/STDOUT
 
 If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `microcule` a very interesting option to remove your dependency on third-party cloud providers. `microcule` allows for local deployment of enterprise ready microservices. `microcule` has few dependencies and will run anywhere Node.js can run.
 
-## Why
+## Enterprise Ready
 
 This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and it's largest installation is now managing 8000+ microservices.
 
@@ -20,7 +20,8 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `microcule` binary for starting HTTP microservice servers
- - [Plugin System](#plugins) based on standard node.js HTTP middlewares
+ - Only require microservice functionality you need
+ - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
  - Uses a "system process per microservice request" design
  - Isolates state of microservice per system process and request ( stateless service requests )
@@ -34,7 +35,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
    - Binary
 
 
-### Supports Microservices In Many Languages
+#### Supports HTTP Microservices In Many Languages
 
   - javascript
   - babel ( ES6 / ES7 / etc ... )
