@@ -2,36 +2,33 @@ var microcule = require('../');
 var express = require('express');
 var app = express();
 
-var nodeService = function testService (opts) {
-  var res = opts.res;
-  // console.log('logging to console');
-  setTimeout(function(){
-    res.json(opts.params);
-  }, 50);
-};
-
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
 var bodyParser = require('../lib/plugins/bodyParser');
-var rateLimiter = require('../lib/plugins/rateLimiter');
+var sourceGithubGist = require('../lib/plugins/sourceGithubGist');
+var sourceGithubRepo = require('../lib/plugins/sourceGithubRepo');
 var spawn = require('../lib/plugins/spawn');
 
 var handler = spawn({
-  code: nodeService,
+  // code: nodeService,
   language: "javascript"
 });
 
 app.use(logger());
+
+// source from github gist
+app.use(sourceGithubGist({
+  token: "1234",
+  main: "echoHttpRequest.js",
+  gistID: "357645b8a17daeb17458"
+}));
+
 app.use(bodyParser());
 app.use(mschema({
   "hello": {
     "type": "string",
     "required": true
   }
-}));
-app.use(rateLimiter({
-  maxLimit: 1000,
-  maxConcurrency: 2
 }));
 app.use(handler);
 app.use(function(req, res, next){

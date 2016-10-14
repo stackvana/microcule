@@ -3,16 +3,16 @@ var test = require("tape");
 var express = require('express');
 var request = require('request');
 
-var stack, handler, app, server;
+var microcule, handler, app, server;
 
-test('attempt to require stack', function (t) {
-  stack = require('../');
-  t.equal(typeof stack, 'object', 'stack module required');
+test('attempt to require microcule', function (t) {
+  microcule = require('../');
+  t.equal(typeof microcule, 'object', 'microcule module required');
   t.end();
 });
 
 test('attempt to create microservice spawn handler', function (t) {
-  handler = stack.spawn({
+  handler = microcule.plugins.spawn({
     language: "bash",
     code: 'echo "hello world"'
   });

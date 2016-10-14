@@ -1,14 +1,14 @@
-var stack = require('../');
+var microcule = require('../');
 var express = require('express');
 var app = express();
 
 var nodeService = function testService (opts) {
   var res = opts.res;
   console.log('logging to console');
-  res.json(opts.params);
+  res.end('ran service');
 };
 
-var handler = stack.spawn({
+var handler = microcule.plugins.spawn({
   code: nodeService,
   language: "javascript"
 });

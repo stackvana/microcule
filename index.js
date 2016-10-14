@@ -1,15 +1,19 @@
-var stack = {};
-stack.spawn = require('./lib/spawn');
-stack.viewPresenter = require('./lib/viewPresenter');
-stack.validateRequestParams = require('./lib/validateRequestParams');
-stack.requireService = require('./lib/requireService');
-stack.requireServiceSync = require('./lib/requireServiceSync');
+var microcule = {};
 
-stack.plugins = {
+microcule.requireService = require('./lib/requireService');
+microcule.requireServiceSync = require('./lib/requireServiceSync');
+
+microcule.plugins = {
   "bodyParser": require('./lib/plugins/bodyParser'),
   "logger": require('./lib/plugins/logger'),
   "mschema": require('./lib/plugins/mschema'),
-  "rateLimiter": require('./lib/plugins/rateLimiter')
+  "rateLimiter": require('./lib/plugins/rateLimiter'),
+  "sourceGithubGist": require('./lib/plugins/sourceGithubGist'),
+  "sourceGithubRepo": require('./lib/plugins/sourceGithubRepo'),
+  "spawn": require('./lib/plugins/spawn')
 };
 
-module.exports = stack;
+// TODO: refactor viewPresenter into plugin
+microcule.viewPresenter = require('./lib/viewPresenter');
+
+module.exports = microcule;

@@ -2,36 +2,34 @@ var microcule = require('../');
 var express = require('express');
 var app = express();
 
-var nodeService = function testService (opts) {
-  var res = opts.res;
-  // console.log('logging to console');
-  setTimeout(function(){
-    res.json(opts.params);
-  }, 50);
-};
-
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
 var bodyParser = require('../lib/plugins/bodyParser');
-var rateLimiter = require('../lib/plugins/rateLimiter');
+var sourceGithubGist = require('../lib/plugins/sourceGithubGist');
+var sourceGithubRepo = require('../lib/plugins/sourceGithubRepo');
 var spawn = require('../lib/plugins/spawn');
 
 var handler = spawn({
-  code: nodeService,
-  language: "javascript"
+  // code: nodeService,
+  language: "python"
 });
 
 app.use(logger());
+
+// source from github repo
+app.use(sourceGithubRepo({
+  token: "1234",
+  repo: "microculevana/microservice-examples",
+  branch: "master",
+  main: "python/index.py",
+}));
+
 app.use(bodyParser());
 app.use(mschema({
   "hello": {
     "type": "string",
     "required": true
   }
-}));
-app.use(rateLimiter({
-  maxLimit: 1000,
-  maxConcurrency: 2
 }));
 app.use(handler);
 app.use(function(req, res, next){

@@ -1,19 +1,19 @@
 {
-  "name": "stackvana",
-  "version": "3.0.1",
+  "name": "microcule",
+  "version": "4.0.0",
   "description": "SDK and CLI for managing multi-language microservices",
   "main": "index.js",
   "scripts": {
     "test": "tape test/*.*"
   },
   "bin": {
-    "stack": "./bin/stack"
+    "microcule": "./bin/microcule"
   },
   "author": "Marak Squires",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/stackvana/stack.git"
+    "url": "http://github.com/stackvana/microcule.git"
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -32,8 +32,9 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
-    "request": "^2.75.0",
     "microservice-examples": "3.0.0",
+    "octonode": "^0.7.6",
+    "request": "^2.75.0",
     "tape": "^4.6.0"
   }
 }

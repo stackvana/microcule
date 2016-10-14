@@ -3,19 +3,19 @@ var test = require("tape");
 var express = require('express');
 var request = require('request');
 
-var stack, handler, app, server;
+var microcule, handler, app, server;
 
-stack = require('../');
+microcule = require('../');
 
 test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
-  handler = stack.spawn({
+  handler = microcule.plugins.spawn({
     language: "javascript",
     code: function service (service) {
       service.res.json(service.params);
     }
   });
-  app.use(stack.plugins.bodyParser());
+  app.use(microcule.plugins.bodyParser());
   app.use(handler);
   server = app.listen(3000, function () {
     t.equal(typeof handler, "function", "started HTTP microservice server");
