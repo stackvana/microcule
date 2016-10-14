@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var stack = require('../');
+var microcule = require('../');
 var http = require('resource-http');
 var config = require('../config');
 // parse incoming command line arguments
@@ -49,7 +49,7 @@ if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
 startServer(_service);
 
 function showHelp () {
-  console.log('Usage: stack [command] [options] ./path/to/script.foo');
+  console.log('Usage: microcule [command] [options] ./path/to/script.foo');
   console.log(' ');
   console.log('Commands:');
   console.log(' ');
@@ -81,7 +81,7 @@ function startServer (_service) {
       console.log('using presenter for service')
     }
 
-    console.log(_service.language + ' stack started at: http://' +  addr.address + ":" + addr.port);
+    console.log(_service.language + ' microcule started at: http://' +  addr.address + ":" + addr.port);
 
     config.env = process.env;
 
@@ -121,7 +121,7 @@ function startServer (_service) {
             if (err) {
               return next(err);
             }
-            stack.plugins.spawn({
+            microcule.plugins.spawn({
               code: service.code,
               schema: service.schema,
               view: service.view,
@@ -131,7 +131,7 @@ function startServer (_service) {
             })(req, output, next);
           });
         } else {
-          stack.plugins.spawn({
+          microcule.plugins.spawn({
             code: service.code,
             schema: service.schema,
             view: service.view,

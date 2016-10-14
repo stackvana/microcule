@@ -1,4 +1,4 @@
-var stack = require('../');
+var microcule = require('../');
 var express = require('express');
 var app = express();
 
@@ -33,8 +33,8 @@ app.use(mschema({
 app.use(handler);
 app.use(function(req, res, next){
   // Note: It's most likely you will not be able to call res.end or res.write here,
-  // as the stack.plugins.spawn handler should end the response
-  // Any middlewares places after stack.plugins.spawn should be considered "post processing" logic
+  // as the microcule.plugins.spawn handler should end the response
+  // Any middlewares places after microcule.plugins.spawn should be considered "post processing" logic
   console.log('post process service');
 })
 

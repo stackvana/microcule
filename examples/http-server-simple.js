@@ -1,4 +1,4 @@
-var stack = require('../');
+var microcule = require('../');
 var http = require('http');
 
 var service = function testService (opts) {
@@ -7,7 +7,7 @@ var service = function testService (opts) {
 };
 
 /* could also be bash or any supported language */
-var handler = stack.plugins.spawn({
+var handler = microcule.plugins.spawn({
   code: service,
   language: "javascript"
 });

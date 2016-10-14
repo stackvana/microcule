@@ -1,9 +1,9 @@
-var stack = {};
+var microcule = {};
 
-stack.requireService = require('./lib/requireService');
-stack.requireServiceSync = require('./lib/requireServiceSync');
+microcule.requireService = require('./lib/requireService');
+microcule.requireServiceSync = require('./lib/requireServiceSync');
 
-stack.plugins = {
+microcule.plugins = {
   "bodyParser": require('./lib/plugins/bodyParser'),
   "logger": require('./lib/plugins/logger'),
   "mschema": require('./lib/plugins/mschema'),
@@ -14,6 +14,6 @@ stack.plugins = {
 };
 
 // TODO: refactor viewPresenter into plugin
-stack.viewPresenter = require('./lib/viewPresenter');
+microcule.viewPresenter = require('./lib/viewPresenter');
 
-module.exports = stack;
+module.exports = microcule;

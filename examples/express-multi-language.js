@@ -1,7 +1,7 @@
-var stack = require('../');
+var microcule = require('../');
 var express = require('express');
 var app = express();
-var plugins = stack.plugins;
+var plugins = microcule.plugins;
 
 var nodeService = express();
 nodeService.use(plugins.logger());

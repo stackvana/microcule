@@ -3,9 +3,9 @@ var test = require("tape");
 var express = require('express');
 var request = require('request');
 
-var stack, handler, app, server, examples;
+var microcule, handler, app, server, examples;
 
-stack = require('../');
+microcule = require('../');
 
 // Remark: babel and coffee-script are commented out since they aren't included in the package
 // Even as devDependencies they are too big
@@ -38,10 +38,10 @@ return;
 
 test('attempt to start server with handlers for all languages', function (t) {
   app = express();
-  app.use(stack.plugins.bodyParser());
+  app.use(microcule.plugins.bodyParser());
   languages.forEach(function (lang) {
     var service = examples.services[lang + '-hello-world'];
-    var handler = stack.plugins.spawn({
+    var handler = microcule.plugins.spawn({
       language: lang,
       code: service.code
     });
