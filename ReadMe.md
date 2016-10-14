@@ -258,7 +258,7 @@ npm install babel-preset-es2015@6.16.0
 npm install babel-preset-stage-3@6.16.0
 ```
 
-### Who is Using Stack
+### Who is Using Microcule
 
 <a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>
 
