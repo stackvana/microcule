@@ -47,4 +47,6 @@ app.use('/bash', bashService);
 
 app.listen(3000, function () {
   console.log('server started on port 3000');
+  console.log('node endpoint mount at /node');
+  console.log('bash endpoint mount at /bash')
 });
