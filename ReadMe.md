@@ -33,23 +33,20 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
    - Multipart
    - Streaming
    - Binary
-
-
-#### Supports HTTP Microservices In Many Languages
-
-  - javascript
-  - babel ( ES6 / ES7 / etc ... )
-  - coffee-script
-  - bash
-  - lua
-  - perl
-  - php
-  - python
-  - python3
-  - ruby
-  - scheme
-  - smalltalk
-  - tcl
+ - Write Microservices in Many Programming Languages
+   - javascript
+   - babel ( ES6 / ES7 / etc ... )
+   - coffee-script
+   - bash
+   - lua
+   - perl
+   - php
+   - python
+   - python3
+   - ruby
+   - scheme
+   - smalltalk
+   - tcl
 
 <a name="plugins"></a>
 #### Plugins
