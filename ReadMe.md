@@ -51,6 +51,24 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
   - smalltalk
   - tcl
 
+<a name="plugins"></a>
+#### Plugins
+
+`microcule` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `microcule` plugin, or re-use any `microcule` plugin as a middleware in any existing Node application.
+
+**Available Plugins**
+
+- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **logger** - Basic extendable request / response logger function 
+- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
+- **sourceGithubGist** - Pulls microservice source code from a Github Gist
+- **sourceGithubRepo** - Pulls microservice source code from a Github Repository
+- **spawn** - Spawns instance of microservice code in a new isolated child process. Maps HTTP req/res to process STDIN/STDOUT
+- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
+
+For Express based plugins example, see: `./examples/express-plugins.js`
+
+Since plugins are standard Node.js middlewares, writing [custom plugins](#customPlugins) is very easy.
 
 ## Installation
 
@@ -115,25 +133,6 @@ Service target language is automatically detected based on the file extension of
 
 *Note: Please see [Babel Support](#babel) for additional Babel configuration*
 
-
-<a name="plugins"></a>
-## Plugins
-
-`microcule` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `microcule` plugin, or re-use any `microcule` plugin as a middleware in any existing Node application.
-
-**Available Plugins**
-
-- **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
-- **logger** - Basic extendable request / response logger function 
-- **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
-- **sourceGithubGist** - Pulls microservice source code from a Github Gist
-- **sourceGithubRepo** - Pulls microservice source code from a Github Repository
-- **spawn** - Spawns instance of microservice code in a new isolated child process. Maps HTTP req/res to process STDIN/STDOUT
-- **rateLimiter** - Extendable request rate limiter. Holds rate limits in-memory or in Redis.
-
-For Express based plugins example, see: `./examples/express-plugins.js`
-
-Since plugins are standard Node.js middlewares, writing [custom plugins](#customPlugins) is very easy.
 
 ### Programmatically Inside Node.js
 
