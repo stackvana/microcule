@@ -262,7 +262,7 @@ npm install babel-preset-stage-3@6.16.0
 
 <a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>
 
-*Is your business using Stack in production? Let us know by opening a pull request with your company's logo and website.*
+*Is your business using Microcule in production? Let us know by opening a pull request with your company's logo and website.*
 
 ### Credits
 
