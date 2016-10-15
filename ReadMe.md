@@ -261,6 +261,12 @@ npm install babel-preset-stage-3@6.16.0
 
 *Is your business using Microcule in production? Let us know by opening a pull request with your company's logo and website.*
 
+### Etymology
+
+**micro** - a combining form with the meanings “small”
+
+**cule** - indicating smallness
+
 ### Credits
 
 Author: 
