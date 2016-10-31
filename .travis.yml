@@ -6,3 +6,8 @@ node_js:
 
 script:
   - "npm test"
+
+os:
+  - linux
+  - osx
+  - windows
