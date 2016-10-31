@@ -1,6 +1,6 @@
 {
   "name": "microcule",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "SDK and CLI for managing multi-language microservices",
   "main": "index.js",
   "scripts": {
