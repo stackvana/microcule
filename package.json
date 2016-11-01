@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "cross-spawn": "^5.0.0",
     "hyperquest": "^2.0.0",
     "merge-params": "^1.1.0",
     "minimist": "^1.2.0",
