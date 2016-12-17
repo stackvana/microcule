@@ -32,6 +32,7 @@
     "view": "^1.0.0"
   },
   "devDependencies": {
+    "cross-spawn": "^5.0.1",
     "express": "^4.14.0",
     "microservice-examples": "4.x.x",
     "octonode": "^0.7.6",
