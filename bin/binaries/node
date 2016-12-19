@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /*
   Spawns a service as a child process
   
@@ -41,9 +40,6 @@ if (typeof argv.c === "undefined" || argv.c.length === 0) {
 }
 
 var code = argv.c;
-
-var request = require('hyperquest');
-
 var service = argv.s;
 
 try {
@@ -54,6 +50,8 @@ try {
   };
 }
 
+
+
 // babel support for es6 / es7
 // the spawned child needs regenerator run-time here
 if (service.language === "babel" || service.language === "es7") {
@@ -63,7 +61,6 @@ if (service.language === "babel" || service.language === "es7") {
 }
 
 var rs = require('run-service');
-var psr = require('parse-service-request');
 
 // create a new writable stream to wrap / handle STDOUT
 var Writable = require('stream').Writable;
@@ -207,6 +204,7 @@ function errorHandler (err) {
   }
 };
 
+
 // parse the incoming service env from argv
 var env = JSON.parse(argv.e);
 
@@ -219,7 +217,6 @@ process.stdin.host = env.input.host;
 process.stdin.url = env.input.url;
 process.stdin.connection = env.input.connection;
 process.stdin.resource = { params: {}};
-
 
 // Send logs to stderr as JSON message
 var debug = function debug () {
@@ -249,25 +246,62 @@ process.on('message', function (m){
 var serviceEnv = {};
 
 
+
 // Remark: serviceEnv object is used to populate the microservice object passed into your code
 // You may customize this file as you wish
 // I've added an if statement which hook.io uses for additional SDK and microservice helper methods
+
+// Note: This block of code is unused by default
 if (env.isHookio) {
 
-  var sdk = require('hook.io-sdk');
+  // it's important to lazy load hook.io-sdk ( for services not using the sdk )
+  // this reduces the total time of node services by over 100ms
+  function createClient () {
+    var sdk = require('hook.io-sdk');
+    var dev = {
+      host: "0.0.0.0",
+      port: 9999,
+      protocol: "http",
+      hook_private_key: env.hookAccessKey
+    }
+    return sdk.createClient(dev);
+  };
 
-  var dev = {
-    host: "0.0.0.0",
-    port: 9999,
-    protocol: "http",
-    hook_private_key: env.hookAccessKey
-  }
+  serviceEnv.datastore = {
+    get: function (key, cb) {
+      //serviceEnv.sdk = sdk;
+      var client = createClient();
+      client.datastore.get(key, cb);
+    },
+    set: function (key, val, cb) {
+      var client = createClient();
+      client.datastore.set(key, val, cb);
+    }
+  };
 
-  serviceEnv.sdk = sdk;
-  var client = sdk.createClient(dev);
-  serviceEnv.client = client;
-  serviceEnv.datastore = client.datastore;
-  serviceEnv.fs = client.files;
+  serviceEnv.fs = {
+    readFile: function (key, cb) {
+      var client = createClient();
+      client.files.readFile(key, cb);
+    },
+    writeFile: function (key, val, cb) {
+      var client = createClient();
+      client.files.writeFile(key, val, cb);
+    },
+    readdir: function (key, cb) {
+      //serviceEnv.sdk = sdk;
+      var client = createClient();
+      client.files.readdir(key, cb);
+    },
+    removeFile: function (key, cb) {
+      var client = createClient();
+      client.files.removeFile(key, cb);
+    },
+    stat: function (key, cb) {
+      var client = createClient();
+      client.files.stat(key, cb);
+    }
+  };
 
 }
 
@@ -275,6 +309,7 @@ function _require (module) {
   return require(module);
 }
 
+// var psr = require('parse-service-request');
 /*
 psr(process.stdin, output, function (req, res, fields) {
 
