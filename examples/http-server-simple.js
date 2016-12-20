@@ -2,7 +2,7 @@ var microcule = require('../');
 var http = require('http');
 
 var service = function testService (opts) {
-  opts.res.write('hello node!');ddd
+  opts.res.write('hello node!');
   opts.res.end();
 };
 
