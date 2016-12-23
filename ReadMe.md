@@ -139,7 +139,7 @@ Service target language is automatically detected based on the file extension of
 
 see: `./examples` for more examples
 
-`express-simple.js`
+`node express-simple.js`
 
 ```js
 var microcule = require('microcule');
