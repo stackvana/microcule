@@ -254,54 +254,17 @@ var serviceEnv = {};
 // Note: This block of code is unused by default
 if (env.isHookio) {
 
-  // it's important to lazy load hook.io-sdk ( for services not using the sdk )
-  // this reduces the total time of node services by over 100ms
-  function createClient () {
-    var sdk = require('hook.io-sdk');
-    var dev = {
-      host: "0.0.0.0",
-      port: 9999,
-      protocol: "http",
-      hook_private_key: env.hookAccessKey
-    }
-    return sdk.createClient(dev);
-  };
-
-  serviceEnv.datastore = {
-    get: function (key, cb) {
-      //serviceEnv.sdk = sdk;
-      var client = createClient();
-      client.datastore.get(key, cb);
-    },
-    set: function (key, val, cb) {
-      var client = createClient();
-      client.datastore.set(key, val, cb);
-    }
-  };
-
-  serviceEnv.fs = {
-    readFile: function (key, cb) {
-      var client = createClient();
-      client.files.readFile(key, cb);
-    },
-    writeFile: function (key, val, cb) {
-      var client = createClient();
-      client.files.writeFile(key, val, cb);
-    },
-    readdir: function (key, cb) {
-      //serviceEnv.sdk = sdk;
-      var client = createClient();
-      client.files.readdir(key, cb);
-    },
-    removeFile: function (key, cb) {
-      var client = createClient();
-      client.files.removeFile(key, cb);
-    },
-    stat: function (key, cb) {
-      var client = createClient();
-      client.files.stat(key, cb);
-    }
-  };
+  var sdk = require('hook.io-sdk');
+  var dev = {
+    host: "0.0.0.0",
+    port: 9999,
+    protocol: "http://",
+    hook_private_key: env.hookAccessKey
+  }
+  var client = sdk.createClient(dev);
+  serviceEnv.datastore = client.datastore;
+  serviceEnv.fs = client.files;
+  serviceEnv.logs = client.logs;
 
 }
 
