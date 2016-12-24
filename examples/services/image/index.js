@@ -8,7 +8,7 @@ module['exports'] = function imageResize (hook) {
   hook.res.writeHead(200, { 'Content-Type': 'image/png' });
   // create a gm resize stream and pipe to response
   gm(stream)
-    .options({imageMagick: true })
+    .options({imageMagick: true }) // set to `true` for MacOS ( gm by default )
     .resize(150, 150)
     .stream()
     .pipe(hook.res);
