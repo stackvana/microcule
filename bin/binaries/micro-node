@@ -242,10 +242,7 @@ process.on('message', function (m){
 });
 */
 
-
 var serviceEnv = {};
-
-
 
 // Remark: serviceEnv object is used to populate the microservice object passed into your code
 // You may customize this file as you wish
@@ -265,7 +262,7 @@ if (env.isHookio) {
   serviceEnv.datastore = client.datastore;
   serviceEnv.fs = client.files;
   serviceEnv.logs = client.logs;
-
+  serviceEnv.sdk = client;
 }
 
 function _require (module) {
