@@ -6,7 +6,7 @@
 
 Software Development Kit and Command Line Interface for spawning streaming HTTP [microservices](http://martinfowler.com/articles/microservices.html) in multiple programming languages.
 
-At it's core, `microcule` maps HTTP request/response streams to the STDIN/STDOUT streams of any programming language binary. It is similiar to [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizies additional STDIO streams and does not attempt to parse STDOUT for HTTP response methods.
+At it's core, `microcule` maps HTTP request/response streams to the STDIN/STDOUT streams of any programming language binary. It is similar to [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizes additional STDIO streams and does not attempt to parse STDOUT for HTTP response methods.
 
 If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `microcule` a very interesting option to remove your dependency on third-party cloud providers. `microcule` allows for local deployment of enterprise ready microservices. `microcule` has few dependencies and will run anywhere Node.js can run.
 
