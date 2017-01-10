@@ -3,10 +3,15 @@
 from sys import argv
 import json
 
-# print argv[0] # binary
+def log( entry ):
+   "This writes to the logs"
+   sys.stderr.write('{ "type": "log", "payload": { "entry": ' + json.dumps(entry) + '}}\n\n')
+   return
 
+# print argv[0] # binary
 # print argv[1] # -c
 # print argv[2] # the code
+
 code = argv[2]
 
 # print argv[3] # -e
