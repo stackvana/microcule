@@ -1,4 +1,5 @@
 var microcule = require('../');
+var config = require('../config');
 var http = require('http');
 
 var service = function testService (opts) {
@@ -21,6 +22,6 @@ var server = http.createServer(function(req, res){
   });
 });
 
-server.listen(3000, function () {
-  console.log('http server started on port 3000');
+server.listen(config.http.port, function () {
+  console.log('http server started on port ' + config.http.port);
 });

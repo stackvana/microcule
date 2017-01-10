@@ -1,4 +1,5 @@
 var microcule = require('../');
+var config = require('../config');
 var express = require('express');
 var app = express();
 var plugins = microcule.plugins;
@@ -45,8 +46,8 @@ bashService.use(plugins.spawn({
 }))
 app.use('/bash', bashService);
 
-app.listen(3000, function () {
-  console.log('server started on port 3000');
+app.listen(config.http.port, function () {
+  console.log('server started on port ' + config.http.port);
   console.log('node endpoint mount at /node');
   console.log('bash endpoint mount at /bash')
 });
