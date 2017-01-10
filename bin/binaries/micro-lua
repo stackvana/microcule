@@ -7,6 +7,20 @@ inject = (arg[6])
 -- print (code)
 -- print (inject)
 
+-- TODO: figure out a way to require the json.lua file from ./bin/binaries/lib/micro-lua
+-- local handle = io.popen("pwd")
+-- local __dirname = handle:read("*a")
+-- handle:close()
+-- __dirname = string.gsub(__dirname, "\n", "") -- remove line breaks
+-- local h = __dirname .. "/bin/binaries/lib/lua/json"
+-- print(h)
+
+local json = require('json')
+
+function log(...)
+  io.stderr:write('{ "type": "log", "payload": { "entry": ' .. json.stringify(arg, false) .. '}}')
+end
+
 local injectVars = assert(loadstring(inject))
 injectVars()
 
