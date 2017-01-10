@@ -58,8 +58,12 @@ test('attempt to run hello world all languages', function (t) {
   languages.forEach(function (lang) {
     request('http://localhost:3000/' + lang, function (err, res, body) {
       var noCarriageReturn = ["perl", "scheme", "php"];
+      var doCRLF = ["python", "python3"];
+      var crlf = (process.platform == 'win32')?'\r\n':'\n';
       if (noCarriageReturn.indexOf(lang) !== -1) {
         t.equal(body, 'hello world', 'got correct response from ' + lang);
+      } else if (doCRLF.indexOf(lang) !== -1) {
+        t.equal(body, 'hello world'+crlf, 'got correct response from ' + lang);
       } else {
         t.equal(body, 'hello world\n', 'got correct response from ' + lang);
       }

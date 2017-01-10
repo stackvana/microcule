@@ -1,31 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-from sys import argv
-import json
+def __prepare():
+    global code, service, Hook
 
-def log( entry ):
-   "This writes to the logs"
-   sys.stderr.write('{ "type": "log", "payload": { "entry": ' + json.dumps(entry) + '}}\n\n')
-   return
+    import sys
+    import os.path
+    sys.path.insert(0, os.path.join(os.path.dirname(sys.argv[0]), 'lib', 'python'))
+    # print(sys.argv)
+    # print(sys.path)
 
-# print argv[0] # binary
-# print argv[1] # -c
-# print argv[2] # the code
+    import microcule
 
-code = argv[2]
+    code, service, Hook = microcule.parse_argv()
 
-# print argv[3] # -e
-# print argv[4] # the env
-envJSON = argv[4]
-Hook = json.loads(envJSON)
-Hook['req'] = Hook['input']
-## TODO: full mapping of http including streaming / multipart streaming
-
-# print argv[5] # -s
-# print argv[6] # the service
-# TODO: do something with service variable
-service = argv[6]
+__prepare()
+del __prepare
 
 # Execute the code as a string in ( this ) context
-# print code
-exec code
+# print(code)
+exec(code)
