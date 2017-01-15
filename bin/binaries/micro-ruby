@@ -19,7 +19,18 @@ Hook = _env
 
 # map Hook.env variables to ENV ruby scope ( for convenience )
 _env['env'].each do |k, v|
-  ENV[k] = v
+  # string values can be set as-is
+  if v.is_a?(String)
+    # puts "string #{k} #{v}"
+    ENV[k] = v
+  end
+
+  # object values need to be converted to JSON, or else Ruby will error
+  if v.is_a?(Object)
+    # puts "object #{k} #{v}"
+    ENV[k] = v.to_json
+  end
+
 end
 
 # TODO: do something with service
