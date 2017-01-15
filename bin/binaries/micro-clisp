@@ -1,0 +1,15 @@
+#!/usr/bin/env clisp
+; TODO: better handling of null / empty lines ( end of file )
+(defun read-objects-from-string (str)
+  (loop :for i :from 0
+        :while (< i (length str))
+        :collect (multiple-value-bind (object offset)
+                     (read-from-string str t nil :start i)
+                   (setf i (- offset 1))
+                   object)))
+
+; sixth cli argument, -e ( env )
+(mapcar #'eval (read-objects-from-string (sixth *args*)))
+
+; second cli argument, -c ( code )
+(mapcar #'eval (read-objects-from-string (second *args*)))

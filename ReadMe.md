@@ -37,6 +37,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
    - javascript
    - babel ( ES6 / ES7 / etc ... )
    - coffee-script
+   - common lisp
    - bash
    - lua
    - perl
@@ -109,6 +110,7 @@ https://github.com/Stackvana/microservice-examples
     microcule ./examples/services/echo/echo.js
     microcule -l babel ./examples/services/echo/echo-es6-async.js
     microcule ./examples/services/echo/echo.sh
+    microcule ./examples/services/echo/echo.lisp
     microcule ./examples/services/echo/echo.lua
     microcule ./examples/services/echo/echo.php
     microcule ./examples/services/echo/echo.pl
