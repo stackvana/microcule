@@ -2,8 +2,16 @@
 
 require 'json'
 
+# simple logging method
+def log(*args)
+  jsonMessage = "{ \"type\": \"log\", \"payload\" : { \"entry\": #{args.to_json} } }"
+  STDERR.puts jsonMessage
+end
+
+# service source code is passed in through -c "string" ( second item in argv array )
 code = ARGV[1]
 
+# service enviroment code is passed in through -e "json string" ( third item in argv array )
 _env = JSON.parse(ARGV[3])
 
 # assign hook enviroment to Hook variables ( contains params / env / etc )
