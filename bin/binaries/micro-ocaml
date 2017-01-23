@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# easiest way to implement ocaml seems to be piping the source code directly into stdin of utop
+echo $2 | utop -stdin
