@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "cron-parser": "^2.3.0",
     "cross-spawn": "^5.0.0",
     "hyperquest": "^2.0.0",
     "merge-params": "^1.1.0",
@@ -33,10 +34,11 @@
   },
   "devDependencies": {
     "express": "^4.14.0",
+    "gm": "^1.23.0",
     "microservice-examples": "4.x.x",
     "octonode": "^0.7.6",
     "request": "^2.75.0",
-    "tape": "^4.6.0",
-    "tap": "0.4.11"
+    "tap": "0.4.11",
+    "tape": "^4.6.0"
   }
 }

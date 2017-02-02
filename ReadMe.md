@@ -59,6 +59,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 **Available Plugins**
 
 - **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
+- **cronScheduler** - Schedule function calls on a timer using a simple [Cron](https://en.wikipedia.org/wiki/Cron) syntax
 - **logger** - Basic extendable request / response logger function 
 - **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
 - **sourceGithubGist** - Pulls microservice source code from a Github Gist
