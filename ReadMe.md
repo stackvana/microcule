@@ -312,7 +312,8 @@ npm install babel-preset-stage-3@6.16.0
 
 ### Who is Using Microcule
 
-<a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>
+<a href="https://hook.io"><img src="http://hook.io/img/logo.png" height="22" width="100"/></a>&nbsp;&nbsp;
+<a href="https://partnerhero.com"><img src="https://partnerhero.com/img/black-and-orange-logo-original.png" height="22" width="100"/></a>
 
 *Is your business using Microcule in production? Let us know by opening a pull request with your company's logo and website.*
 
