@@ -9,7 +9,7 @@ microcule = require('../');
 
 // Remark: babel and coffee-script are commented out since they aren't included in the package
 // Even as devDependencies they are too big
-var languages = ['bash', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'scheme', 'tcl'];
+var languages = ['bash', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'scheme', 'tcl', 'java'];
 
 test('attempt to require microservice-examples module', function (t) {
   examples = require('microservice-examples');

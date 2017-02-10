@@ -1,0 +1,12 @@
+#!/bin/bash
+_CODE=$2
+_INJECT=$6
+
+# Detect java
+_java=$(readlink -f $(which java))
+
+# End Detect java
+source_name=$(basename "$_CODE")
+class_name=${source_name%%.*}
+dir_name=$(dirname "$_CODE")
+cd "$dir_name"; echo `$_java $class_name`
