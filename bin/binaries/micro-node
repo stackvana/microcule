@@ -33,6 +33,7 @@
 
 // parse incoming command line arguments
 var argv = require('minimist')(process.argv.slice(2));
+var net = require('net');
 
 if (typeof argv.c === "undefined" || argv.c.length === 0) {
   console.log('Source code required. Please pass in -c option');
@@ -277,6 +278,20 @@ psr(process.stdin, output, function (req, res, fields) {
     env.params[p] = fields[p];
   }
 */
+
+// pipe3 is an additional STDIO pipe we can use for HTTP request / response methods
+// it's currently being used to handle incoming request.end and request.close events
+var pipe3 = new net.Socket({ fd: 3 });
+pipe3.on('data', function (buf) {
+  var str = buf.toString();
+  if (str.search('input.close') !== -1) {
+    process.stdin.emit('close');
+  }
+  if (str.search('input.end') !== -1) {
+    process.stdin.emit('end');
+  }
+});
+
 serviceEnv.req = process.stdin;
 serviceEnv.res = output;
 serviceEnv.env = env.env;
