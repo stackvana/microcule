@@ -26,6 +26,6 @@ node http-server-simple.js
 
 These examples show how to use `microcule` as an HTTP middleware in Express or any standard Node.js HTTP server.
 
-## 50+ Microservice Examples using Microcule
+## 60+ Microservice Examples using Microcule
 
 see: https://github.com/Stackvana/microservice-examples

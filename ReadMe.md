@@ -20,6 +20,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
 ## Features
 
+ - Can map any arbitrary binary like `ls`, `tail` or any compiled app to a streaming HTTP microservice
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `microcule` binary for starting HTTP microservice servers
  - Modular design, only require the microservice functionality you need
@@ -168,6 +169,42 @@ app.listen(3000, function () {
   console.log('server started on port 3000');
 });
 
+```
+
+## Spawning arbitrary compiled binaries
+
+Sometimes you may need to spawn a precompiled arbitrary binary instead of a script based microservice. `microcule` supports two ways of spawning arbitrary binaries.
+
+### Executing arbitrary binaries from microcule Bash services
+
+You can create a new `bash` script and execute your binary in a bash sub-shell using `microcule`'s built-in support for Bash scripts.
+
+Simply create a bash script and use `microcule` to spawn it. This will work for *any* binary. Here is a simple curl example:
+
+`bash-curl-request.sh`
+```bash
+curl --silent --data 'foo=bar&hello=there' http://hook.io/examples/echo
+```
+
+Then run:
+
+```bash
+microcule bash-curl-request.sh
+```
+
+This same example can be found at [https://github.com/Stackvana/microcule-examples/tree/master/bash-curl-request](https://github.com/Stackvana/microcule-examples/tree/master/bash-curl-request)
+
+### Spawning arbitrary binaries directly from microcule
+
+In some cases, creating a bash sub-shell is not ideal and you'll want to directly spawn your precompiled binary.
+
+This is very easy, simple call `microcule.spawn` using the `bin` and `argv` options. Here is an example of spawning `echo`
+
+```js
+var handler = microcule.plugins.spawn({
+  bin: 'echo',
+  argv: ['hello', 'world']
+});
 ```
 
 ## Multiple Microservices Per Server Instance
