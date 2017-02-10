@@ -103,7 +103,7 @@ By default, `microcule` will attempt to start a listening HTTP server based on a
 
 microcule ./path/to/script.foo
 
-### 50+ Microservice Examples
+### 70+ Microservice Examples
 
 You can find many example microservices which can be run with microcule here:
 
@@ -111,21 +111,34 @@ https://github.com/Stackvana/microservice-examples
 
 #### CLI Examples
 
-    microcule ./examples/services/echo/echo.js
-    microcule -l babel ./examples/services/echo/echo-es6-async.js
-    microcule ./examples/services/echo/echo.sh
-    microcule ./examples/services/echo/echo.lisp
-    microcule ./examples/services/echo/echo.lua
-    microcule ./examples/services/echo/echo.php
-    microcule ./examples/services/echo/echo.pl
-    microcule ./examples/services/echo/echo.py
-    microcule -l python3 ./examples/services/echo/echo-py3.py
-    microcule ./examples/services/echo/echo.rb
-    microcule ./examples/services/echo/echo.coffee
-    microcule ./examples/services/echo/echo.ss
-    microcule ./examples/services/echo/echo.st
-    microcule ./examples/services/echo/echo.tcl
+```bash
+# mount any arbitrary command to a streaming HTTP endpoint
+microcule echo "hello world"
+microcule cat ReadMe.md
+microcule tail -f ReadMe.md
 
+# mount streaming HTTP functions directly from source files
+microcule ./examples/services/echo/echo.js
+microcule -l babel ./examples/services/echo/echo-es6-async.js
+microcule ./examples/services/echo/echo.sh
+microcule ./examples/services/echo/echo.lisp
+microcule ./examples/services/echo/echo.lua
+microcule ./examples/services/echo/echo.php
+microcule ./examples/services/echo/echo.pl
+microcule ./examples/services/echo/echo.py
+microcule -l python3 ./examples/services/echo/echo-py3.py
+microcule ./examples/services/echo/echo.rb
+microcule ./examples/services/echo/echo.coffee
+microcule ./examples/services/echo/echo.ss
+microcule ./examples/services/echo/echo.st
+microcule ./examples/services/echo/echo.tcl
+
+# run full-features microservices as packages
+git clone https://github.com/stackvana/microcule-examples
+cd microcule-examples/javascript-echo
+microcule .
+
+```
 see: [microservice-examples](https://github.com/Stackvana/microservice-examples) for 50+ examples
 
 Each call to `microcule` will automatically start a listening HTTP server on port `3000`, additional instances of `microcule` will auto-increment the port to `3001`, `3002`, etc.

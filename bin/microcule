@@ -39,7 +39,26 @@ var bodyParser = require('../lib/plugins/bodyParser');
 var viewPresenter = require('../lib/viewPresenter');
 
 var servicePath = path.resolve(process.cwd() + "/" + script);
-var _service = requireServiceSync({ path: servicePath });
+var _service;
+
+try {
+  _service = requireServiceSync({ path: servicePath });
+} catch (err) {
+  if (err.code === 'ENOENT') {
+    // if we could not find the service, attempt to see if it's a globally available binary
+    // TODO: consider using https://github.com/mathisonian/command-exists library
+    var commandExists = true;
+    // if the command exists, assume we are spawning an arbitrary binary with argv as it's arguments
+    if (commandExists) {
+      _service = {
+        bin: script,
+        argv: process.argv.slice(3)
+      }
+    } else {
+      throw err;
+    }
+  }
+}
 
 // language override
 if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
@@ -122,6 +141,8 @@ function startServer (_service) {
               return next(err);
             }
             microcule.plugins.spawn({
+              bin: service.bin,
+              argv: service.argv,
               code: service.code,
               schema: service.schema,
               view: service.view,
@@ -133,6 +154,8 @@ function startServer (_service) {
           });
         } else {
           microcule.plugins.spawn({
+            bin: service.bin,
+            argv: service.argv,
             code: service.code,
             schema: service.schema,
             view: service.view,
