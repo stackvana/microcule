@@ -1,5 +1,13 @@
 package main
-import "fmt"
+
+import (
+    "os"
+    "fmt"
+)
+
 func main() {
-    fmt.Println("hello world")
+  for _,element := range os.Args {
+    fmt.Println(element);
+  }
+  os.Exit(1);
 }
