@@ -6,6 +6,7 @@ var request = require('request');
 var microcule, handler, app, server, examples;
 
 microcule = require('../');
+var config = require('../config');
 
 // Remark: babel and coffee-script are commented out since they aren't included in the package
 // Even as devDependencies they are too big
@@ -48,7 +49,7 @@ test('attempt to start server with handlers for all languages', function (t) {
     app.use('/' + lang, handler);
     t.equal(typeof handler, "function", "/" + lang + " HTTP endpoint added");
   });
-  server = app.listen(3000, function () {
+  server = app.listen(config.http.port, function () {
     t.end();
   });
 });
@@ -56,7 +57,7 @@ test('attempt to start server with handlers for all languages', function (t) {
 test('attempt to run hello world all languages', function (t) {
   t.plan(languages.length);
   languages.forEach(function (lang) {
-    request('http://localhost:3000/' + lang, function (err, res, body) {
+    request('http://localhost:' + config.http.port + '/' + lang, function (err, res, body) {
       var noCarriageReturn = ["perl", "scheme", "php"];
       if (noCarriageReturn.indexOf(lang) !== -1) {
         t.equal(body, 'hello world', 'got correct response from ' + lang);

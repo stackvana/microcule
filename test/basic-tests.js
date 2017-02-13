@@ -4,6 +4,7 @@ var express = require('express');
 var request = require('request');
 
 var microcule, handler, app, server;
+var config = require('../config');
 
 test('attempt to require microcule', function (t) {
   microcule = require('../');
@@ -23,14 +24,14 @@ test('attempt to create microservice spawn handler', function (t) {
 test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
   app.use(handler);
-  server = app.listen(3000, function () {
+  server = app.listen(config.http.port, function () {
     t.equal(typeof handler, "function", "created listening HTTP server")
     t.end();
   });
 });
 
 test('attempt to send simple http request to running microservice', function (t) {
-  request('http://localhost:3000/', function (err, res, body) {
+  request('http://localhost:' + config.http.port + '/', function (err, res, body) {
     t.equal(body, 'hello world\n', 'got correct response');
     t.end();
   })

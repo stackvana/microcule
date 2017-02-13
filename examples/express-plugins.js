@@ -1,4 +1,5 @@
 var microcule = require('../');
+var config = require('../config');
 var express = require('express');
 var app = express();
 
@@ -41,6 +42,6 @@ app.use(function(req, res, next){
   console.log('post process service');
 })
 
-app.listen(3000, function () {
-  console.log('server started on port 3000');
+app.listen(config.http.port, function () {
+  console.log('server started on port ' + config.http.port);
 });

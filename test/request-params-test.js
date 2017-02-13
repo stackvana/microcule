@@ -6,6 +6,7 @@ var request = require('request');
 var microcule, handler, app, server;
 
 microcule = require('../');
+var config = require('../config');
 
 test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
@@ -17,14 +18,14 @@ test('attempt to start simple http server with spawn handler', function (t) {
   });
   app.use(microcule.plugins.bodyParser());
   app.use(handler);
-  server = app.listen(3000, function () {
+  server = app.listen(config.http.port, function () {
     t.equal(typeof handler, "function", "started HTTP microservice server");
     t.end();
   });
 });
 
 test('attempt to send simple http request to running microservice', function (t) {
-  request('http://localhost:3000/', function (err, res, body) {
+  request('http://localhost:' + config.http.port + '/', function (err, res, body) {
     t.equal(body, '{}\n', 'got correct response');
     t.end();
   })
@@ -32,7 +33,7 @@ test('attempt to send simple http request to running microservice', function (t)
 
 test('attempt to send JSON data to running microservice', function (t) {
   request({
-    uri: 'http://localhost:3000/',
+    uri: 'http://localhost:' + config.http.port + '/',
     method: "POST",
     json: {
       a: "b"
