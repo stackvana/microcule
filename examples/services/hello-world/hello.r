@@ -1,5 +1,3 @@
-# the app
+# the R app
 myString <- "Hello, World!"
-
 print ( myString)
-print(head(mtcars))
