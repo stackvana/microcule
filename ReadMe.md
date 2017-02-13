@@ -23,6 +23,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
  - Can map any arbitrary binary like `ls`, `tail` or any compiled app to a streaming HTTP microservice
  - Creates HTTP microservices in multiple Programming Languages
  - Ships with `microcule` binary for starting HTTP microservice servers
+ - By design, requires no Container or Virtual Machine solutions ( it's your choice! )
  - Modular design, only require the microservice functionality you need
  - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
  - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
@@ -36,18 +37,23 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
    - Multipart
    - Streaming
    - Binary
- - Write Microservices in Many Programming Languages
+ - Write Streaming Stateless HTTP Microservices in Many Programming Languages
+   - c ( with `gcc` )
+   - java
    - javascript
    - babel ( ES6 / ES7 / etc ... )
    - coffee-script
    - common lisp
    - bash
    - lua
+   - golang
    - perl
    - php
    - python
    - python3
    - ruby
+   - rust
+   - r
    - scheme
    - smalltalk
    - tcl
