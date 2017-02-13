@@ -13,6 +13,9 @@ config.http.host = argv.h ||  argv.host || config.http.host;
 config.http.port = argv.p ||  argv.port || config.http.port;
 config.watch = argv.w ||  argv.watch || config.watch;
 
+// default to releasing compiled binaries to current working directory of `microcule` binary
+config.releaseDir = config.releaseDir || process.cwd();
+
 if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
   var pkg = require('../package.json')
   console.log(pkg.version)
@@ -147,6 +150,7 @@ function startServer (_service) {
               schema: service.schema,
               view: service.view,
               presenter: service.presenter,
+              releaseDir: config.releaseDir,
               language: service.language,
               config: config,
               log: console.log
@@ -160,6 +164,7 @@ function startServer (_service) {
             schema: service.schema,
             view: service.view,
             presenter: service.presenter,
+            releaseDir: config.releaseDir,
             language: service.language,
             config: config,
             log: console.log
