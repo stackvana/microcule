@@ -34,6 +34,7 @@
     "view": "1.0.0"
   },
   "devDependencies": {
+    "colors": "*",
     "express": "^4.14.0",
     "gm": "^1.23.0",
     "microservice-examples": "4.x.x",
