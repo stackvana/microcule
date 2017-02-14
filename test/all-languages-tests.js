@@ -9,10 +9,12 @@ microcule = require('../');
 
 // Remark: babel and coffee-script are commented out since they aren't included in the package
 // Even as devDependencies they are too big
-var languages = ['bash', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'scheme', 'tcl'];
+// TODO: update tests to use local examples folder for hello world?
+// or should it also include microcule-examples echo tests?
+var languages = ['bash', 'gcc', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'go', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'rust', 'r', 'scheme', 'tcl'];
 
 test('attempt to require microservice-examples module', function (t) {
-  examples = require('microservice-examples');
+  examples = require('microcule-examples');
   t.equal(typeof examples.services, "object", "returned services object");
   t.end();
 });
@@ -57,12 +59,20 @@ test('attempt to run hello world all languages', function (t) {
   t.plan(languages.length);
   languages.forEach(function (lang) {
     request('http://localhost:3000/' + lang, function (err, res, body) {
+      var customResponses = {
+        "r": '[1] "hello world"\n'
+      };
       var noCarriageReturn = ["perl", "scheme", "php"];
-      if (noCarriageReturn.indexOf(lang) !== -1) {
-        t.equal(body, 'hello world', 'got correct response from ' + lang);
+      if (typeof customResponses[lang] !== 'undefined') {
+        t.equal(body, customResponses[lang], 'got correct response from ' + lang);
       } else {
-        t.equal(body, 'hello world\n', 'got correct response from ' + lang);
+        if (noCarriageReturn.indexOf(lang) !== -1) {
+          t.equal(body, 'hello world', 'got correct response from ' + lang);
+        } else {
+          t.equal(body, 'hello world\n', 'got correct response from ' + lang);
+        }
       }
+
     });
   });
 });
