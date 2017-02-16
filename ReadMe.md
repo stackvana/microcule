@@ -2,13 +2,71 @@
 
 <img src="https://travis-ci.org/Stackvana/microcule.svg" alt="build:">
 
+Software Development Kit and Command Line Interface for spawning streaming stateless HTTP [microservices](http://martinfowler.com/articles/microservices.html) for any programming language or arbitrary binary.
+
+Think of it as serverless functions meets [Unix Philosophy](https://en.wikipedia.org/wiki/Unix_philosophy).
+
+see: [100+ Working Service Examples](https://github.com/stackvana/microcule-examples)
+
+
+
+## Table of Contents
+ - [Introduction](#introduction)
+ - [Enterprise Ready](#enterprise-ready)
+ - [Features](#features)
+   - [Modular](#modular)
+   - [Universal](#universal)
+   - [Intelligent HTTP Request Parsing](#tntelligent-http-request-parsing)
+   - [Consistent](#consistent)
+   - [Extendable](#eniversal)
+   - [Veristile](#veristile)
+   - [Containers / Isolation](#containers-isolation)
+ - [Languages](#languages)
+   - c ( with `gcc` )
+   - java
+   - javascript
+   - babel ( ES6 / ES7 / etc ... )
+   - coffee-script
+   - common lisp
+   - bash
+   - lua
+   - golang
+   - ocaml
+   - perl
+   - php
+   - python
+   - python3
+   - ruby
+   - rust
+   - r
+   - scheme
+   - smalltalk
+   - tcl
+ - [Installation](#installation)
+ - [Plugins](#plugins)
+   - Body Parser
+   - Compiler
+   - Cron Scheduler
+   - Logger
+   - Rate limiter
+   - Mschema Request Validator
+   - Source Github repo
+   - Source Gist repo
+   - Spawn
+ - [Command Line Interface Usage](#cli-examples)
+ - [Node.js HTTP Middleware Usage](#node-js-middleware-usage)
+ - [Spawning arbitrary compiled binaries](#)
+ - [Multiple Microservices Per Server Instance](#)
+ - [100+ Working Code Examples](#examples)
+ - [Etymology](#Etymology)
+
+
+
 ## Introduction
 
-Software Development Kit and Command Line Interface for spawning streaming HTTP [microservices](http://martinfowler.com/articles/microservices.html) in multiple programming languages.
+At it's core, `microcule` maps HTTP request response streams to the STDIN STDOUT streams of a function in any arbitrary programming language or any compiled binary. It's reminiscent of [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizes additional STDIO streams, does not attempt to parse STDOUT for HTTP response methods. microcule is an old concept rethought and improved with the latest industry standard toolings.
 
-At it's core, `microcule` maps HTTP request/response streams to the STDIN/STDOUT streams of any programming language binary. It is similar to [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizes additional STDIO streams and does not attempt to parse STDOUT for HTTP response methods.
-
-If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `microcule` a very interesting option to remove your dependency on third-party cloud providers. `microcule` allows for local deployment of enterprise ready microservices. `microcule` has few dependencies and will run anywhere Node.js can run.
+If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `microcule` a very interesting option to remove your dependency on third-party cloud providers. microcule allows for local deployment of enterprise ready microservices. microcule has few dependencies and will run anywhere Node.js can run.
 
 [quick demonstration video](https://www.youtube.com/embed/GSfeBHN1c_g "quick demonstration video")
 
@@ -20,43 +78,67 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
 ## Features
 
- - Can map any arbitrary binary like `ls`, `tail` or any compiled app to a streaming HTTP microservice
- - Creates HTTP microservices in multiple Programming Languages
- - Ships with `microcule` binary for starting HTTP microservice servers
- - By design, requires no Container or Virtual Machine solutions ( it's your choice! )
- - Modular design, only require the microservice functionality you need
- - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
- - Maps HTTP request / response to STDIN / STDOUT of spawned child processes
- - Uses a "system process per microservice request" design
- - Isolates state of microservice per system process and request ( stateless service requests )
- - Microservice error handling and custom timeouts
- - Can parse any kind of request data
+### Modular
+
+Only require the functionality you need.
+
+
+`microcule` [itself](https://github.com/Stackvana/microcule/blob/compiled-langs/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
+
+### Universal
+
+ - Supports Serverless functions in 20 programming languages! ( and counting )
+ - Supports Serverless with standard Unix or Linux tools ( like `ls` or `echo` )
+ - Full support for mapping HTTP -> STDIO streams
+ - Unix first. No custom APIs or bufferred contextes
+
+
+### Intelligent HTTP Request Parsing
+
+`microcule` can parse any kind of request data based on the incoming request's `content-type` header and will always stream requests by default.
    - Query
    - JSON
    - Form
    - Multipart
    - Streaming
    - Binary
- - Write Streaming Stateless HTTP Microservices in Many Programming Languages
-   - c ( with `gcc` )
-   - java
-   - javascript
-   - babel ( ES6 / ES7 / etc ... )
-   - coffee-script
-   - common lisp
-   - bash
-   - lua
-   - golang
-   - perl
-   - php
-   - python
-   - python3
-   - ruby
-   - rust
-   - r
-   - scheme
-   - smalltalk
-   - tcl
+
+Even binary data works great! Here is an example of resizing in image in JavaScript or Bash.
+
+### Consistent
+
+ - Spawn functions or abritrary binaries in response to HTTP requests
+ - Uses a fresh system process per request per execution
+ - State of services clears on every request
+ - Service source code is immutable ( unless configured otherwise )
+ - Uses build step for compiled langauges
+
+
+### Veristile
+
+ - Can serve any arbitrary binary like `ls`, `tail` as a streaming HTTP microservice
+ - Ships with `microcule` binary for starting HTTP microservice servers
+
+ - Scripting support for HTTP request / response API ( differs per language )
+
+### Extendable
+
+ - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
+ - Should theorically be able to work with all programming languages
+ - Should work with any existing Unix or Linux tool
+ - Provides simple customizable interfaces for programmang language enviroments
+ - Simplistic design makes it very easy to write code / create new plugins
+
+
+### Containers / Isolation
+  - Ships with no container or OS virtualization
+  - By design, requires no Container or Virtual Machine solutions ( it's your choice! )
+  - Isolates state of microservice per system process and request ( stateless service requests )
+  - Handles Microservice error handling and custom timeouts
+
+[Read more about securing microcule](#security)
+
+
 
 <a name="plugins"></a>
 #### Plugins
@@ -129,6 +211,7 @@ microcule -l babel ./examples/services/echo/echo-es6-async.js
 microcule ./examples/services/echo/echo.sh
 microcule ./examples/services/echo/echo.lisp
 microcule ./examples/services/echo/echo.lua
+microcule ./examples/services/echo/echo.ml
 microcule ./examples/services/echo/echo.php
 microcule ./examples/services/echo/echo.pl
 microcule ./examples/services/echo/echo.py
@@ -156,7 +239,7 @@ Service target language is automatically detected based on the file extension of
 *Note: Please see [Babel Support](#babel) for additional Babel configuration*
 
 
-### Programmatically Inside Node.js
+### Node.js Middleware Usage
 
 `microcule` is designed to work as standard HTTP middlewares.
 
