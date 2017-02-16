@@ -129,7 +129,7 @@ Even binary data works great! Here is an example of resizing in image in [JavaSc
 ### No Containers
 
   - By design, ships with no container or OS virtualization
-  - Will work with any Container or Virtual Machine solutions ( it's your choice! )
+  - Since it makes no assumptions about worker environment, `microcule` will work with any Container or Virtual Machine solutions
   - Isolates state of microservice per system process and request ( stateless service requests )
   - Handles Microservice error handling and custom timeouts
 
@@ -363,7 +363,7 @@ See: `./examples/express-plugins.js` for more details.
 
 ## Security
 
-Running untrusted microservice code in a safe way is a complex problem. The `microcule` module is only intended to isolate a small part of the entire untrusted source code execution chain.
+Running untrusted microservice code in a safe way is a complex problem. `microcule` is only intended to isolate a small part of the entire untrusted source code execution chain.
 
 **If you intend to use this module to run untrusted source code please consider the following:**
 
