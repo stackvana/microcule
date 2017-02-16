@@ -6,7 +6,7 @@ import pkg_resources
 import wsgiref.handlers
 
 
-class FullHookIOJSONFormatter(logging.Formatter):
+class FullMicroculeJSONFormatter(logging.Formatter):
     def format(self, record):
         record.message = record.getMessage()
         if record.exc_info and not record.exc_text:
@@ -22,14 +22,14 @@ class FullHookIOJSONFormatter(logging.Formatter):
         return json.dumps(res)
 
 
-class SimpleHookIOJSONFormatter(logging.Formatter):
+class SimpleMicroculeJSONFormatter(logging.Formatter):
     def format(self, record):
         msg = logging.Formatter.format(self, record)
         res = {'type': 'log', 'payload': {'entry': msg}}
         return json.dumps(res)
 
 
-class HookIOExceptHook:
+class MicroculeExceptHook:
     def __init__(self, display=1, verbose=1):
         self.display = display
         self.verbose = verbose
@@ -144,9 +144,9 @@ def hookioLoggingConfig(level=None, format=None, datefmt=None):
             return
         hdlr = logging.StreamHandler(sys.stderr)
         if format is None:
-            fmt = FullHookIOJSONFormatter()
+            fmt = FullMicroculeJSONFormatter()
         else:
-            fmt = SimpleHookIOJSONFormatter(format, datefmt)
+            fmt = SimpleMicroculeJSONFormatter(format, datefmt)
         hdlr.setFormatter(fmt)
         logging.root.addHandler(hdlr)
     finally:
@@ -183,6 +183,6 @@ def parse_argv(argv=None):
 
     level = [logging.DEBUG, logging.INFO][prod_mode]
     hookioLoggingConfig(level)
-    sys.excepthook = HookIOExceptHook(debug_output, not prod_mode)
+    sys.excepthook = MicroculeExceptHook(debug_output, not prod_mode)
 
     return code, service, Hook
