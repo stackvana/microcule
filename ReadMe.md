@@ -105,27 +105,29 @@ Even binary data works great! Here is an example of resizing in image in [JavaSc
 
 ### Consistent
 
- - Spawn functions or abritrary binaries in response to HTTP requests
+ - Spawns functions or arbitrary binaries in response to HTTP requests
  - Uses a fresh system process per request per execution
  - State of services clears on every request
  - Service source code is immutable ( unless configured otherwise )
- - Uses build step for compiled langauges
+ - Uses build step for compiled languages
 
 ### Versatile
 
- - Can serve any arbitrary binary like `ls`, `tail` as a streaming HTTP microservice
  - Ships with `microcule` binary for starting HTTP microservice servers
  - Scripting support for HTTP request / response API ( differs per language )
+ - Can serve any arbitrary binary like `echo`, `ls`, and `tail -f` as streaming HTTP microservices
+ - Can optionally accept STDIN and process scripts with Unix style pipes ( useful for using functions in DevOps! )
 
 ### Extendable
 
- - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
- - Should theorically be able to work with all programming languages
+ - Should theoretically be able to work with all programming languages
  - Should work with any existing Unix or Linux tool
- - Provides simple customizable interfaces for programmang language enviroments
- - Simplistic design makes it very easy to write code / create new plugins
+ - Provides simple customizable interfaces for programming language environments
+ - Uses [Plugin System](#plugins) based on standard node.js HTTP middlewares
+ - Simplistic design makes it very easy to add features / add languages / create new plugins
 
 ### No Containers
+
   - By design, ships with no container or OS virtualization
   - Will work with any Container or Virtual Machine solutions ( it's your choice! )
   - Isolates state of microservice per system process and request ( stateless service requests )
