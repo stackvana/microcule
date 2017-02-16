@@ -82,15 +82,14 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 Only require the functionality you need.
 
 
-`microcule` [itself](https://github.com/Stackvana/microcule/blob/compiled-langs/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
+`microcule` [itself](https://github.com/Stackvana/microcule/blob/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
 
 ### Universal
 
  - Supports Serverless functions in 20 programming languages! ( and counting )
- - Supports Serverless with standard Unix or Linux tools ( like `ls` or `echo` )
+ - Supports Serverless with standard Unix or Linux tools ( like `ls`, `echo`, or `tail -f` )
  - Full support for mapping HTTP -> STDIO streams
- - Unix first. No custom APIs or bufferred contextes
-
+ - Unix first. No custom APIs or buffered context
 
 ### Intelligent HTTP Request Parsing
 
@@ -102,7 +101,7 @@ Only require the functionality you need.
    - Streaming
    - Binary
 
-Even binary data works great! Here is an example of resizing in image in JavaScript or Bash.
+Even binary data works great! Here is an example of resizing in image in [JavaScript](https://github.com/Stackvana/microcule-examples/blob/master/image-resize/index.js) or [Bash](https://github.com/Stackvana/microcule-examples/blob/master/bash-image-resize/index.sh).
 
 ### Consistent
 
