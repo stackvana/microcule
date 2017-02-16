@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
 var microcule = require('../');
-var http = require('resource-http');
 var config = require('../config');
 // parse incoming command line arguments
 var argv = require('minimist')(process.argv.slice(2));
 var script = argv._[0];
+var stdin = process.stdin;
+var http;
 
 config.SERVICE_MAX_TIMEOUT = argv.t ||  argv.timeout || config.SERVICE_MAX_TIMEOUT;
 config.http = config.http || {};
 config.http.host = argv.h ||  argv.host || config.http.host;
 config.http.port = argv.p ||  argv.port || config.http.port;
 config.watch = argv.w ||  argv.watch || config.watch;
+config.stream = argv.s ||  argv.stream || config.stream;
 
 // default to releasing compiled binaries to current working directory of `microcule` binary
 config.releaseDir = config.releaseDir || process.cwd();
@@ -27,7 +29,7 @@ if (script === "help") {
   process.exit();
 }
 
-if (typeof script === "undefined") {
+if (typeof script === "undefined" && stdin.isTTY) {
   console.log('path to script is a required argument');
   showHelp();
   process.exit();
@@ -68,7 +70,15 @@ if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
   _service.language = argv.l || argv.language;
 }
 
-startServer(_service);
+if (stdin.isTTY) {
+  // console.log('ignoring will not run in TTY mode')
+  // helps with peformance of STDIN tool
+  http = require('resource-http');
+  startServer(_service);
+  return;
+} else {
+  startSTDIN(_service);
+}
 
 function showHelp () {
   console.log('Usage: microcule [command] [options] ./path/to/script.foo');
@@ -82,8 +92,103 @@ function showHelp () {
   console.log('  -h, --host <value>      Host to listen on');
   console.log('  -p, --port <number>     Port to listen on');
   console.log('  -l, --language <value>  Target programming language');
+  console.log('  -s, --stream <bool>     Enables stream processing for ( STDIN usage only ) ');
   console.log('  -w, --watch <bool>      Reloads source files on every request ( dev only )');
   console.log('  -v, --version           Output the version number');
+}
+
+function startSTDIN (service) {
+
+  var ret = '';
+
+  var opts = {
+    mode: 'buffer'
+  };
+
+  var opts = {
+    mode: 'stream'
+  };
+
+  var Readable = require('stream').Readable;
+  var Writable = require('stream').Writable;
+
+  var input = new Readable;
+  var output = Writable();
+
+  output._write = function (chunk, enc, next) {
+    // console.log('wirtint out',chunk.toString());
+    process.stdout.write(chunk);
+    next();
+  };
+
+  output.on('error', function(err){
+    console.log('err', err)
+  });
+
+  output.on('end', function(err){
+    process.exit();
+  });
+
+  stdin.setEncoding('utf8');
+  if (config.stream) {
+    // if we are in streaming mode, check to see if existing stream exists
+    // if so, write some data to it
+    // TODO: write to spawned MC stream
+    // if no, spawn a new stream and write this first data to it
+    // TODO: mc.spawn
+    stdin.resource = {
+      params: {
+        STDIN: result
+      }
+    };
+    microcule.plugins.spawn({
+      bin: service.bin,
+      argv: service.argv,
+      code: service.code,
+      schema: service.schema,
+      view: service.view,
+      presenter: service.presenter,
+      releaseDir: config.releaseDir,
+      language: service.language,
+      config: config,
+      log: console.log
+    })(stdin, output, function(){
+      // console.log("COMPLETED STREAMING SERVICE")
+    });
+  } else {
+    var result = '';
+    stdin.on('end', function () {
+      // console.log(ret);
+      stdin.resource = {
+        params: {
+          STDIN: result
+        }
+      };
+      // console.log('spawning service'.yellow)
+      microcule.plugins.spawn({
+        bin: service.bin,
+        argv: service.argv,
+        code: service.code,
+        schema: service.schema,
+        view: service.view,
+        presenter: service.presenter,
+        releaseDir: config.releaseDir,
+        language: service.language,
+        config: config,
+        log: console.log
+      })(stdin, output, function(){
+        // console.log("COMPLETED BUFFER SERVICE")
+      });
+    });
+    // if we are in non-streaming buffer mode,
+    // then every time STDIN is received from `microcule`, we will execute a fresh function
+    stdin.on('readable', function () {
+        var chunk;
+        while ((chunk = stdin.read())) {
+          result += chunk.toString();
+        }
+    });
+  }
 }
 
 function startServer (_service) {
