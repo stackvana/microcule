@@ -9,7 +9,6 @@ Think of it as serverless functions meets [Unix Philosophy](https://en.wikipedia
 see: [100+ Working Service Examples](https://github.com/stackvana/microcule-examples)
 
 
-
 ## Table of Contents
  - [Introduction](#introduction)
  - [Enterprise Ready](#enterprise-ready)
@@ -201,26 +200,44 @@ By default, `microcule` will attempt to start a listening HTTP server based on a
 
 [Here can find many example microservices which can be run with microcule](https://github.com/Stackvana/microcule-examples)
 
+These same examples are available as live services at [hook.io/examples](https://hook.io/examples).
+
 #### CLI Examples
 
 ```bash
+
 # mount any arbitrary command to a streaming HTTP endpoint
+
 microcule echo "hello world"
 microcule cat ReadMe.md
 microcule tail -f ReadMe.md
 
-# mount streaming HTTP functions directly from source files
+# pipe in data from arbitrary commands
+
+echo "hello world" | microcule ./examples/services/echo/echo-stdin.js
+ls | microcule ./examples/services/echo-stdin.js
+ls | microcule ./examples/streams/transform.js
+tail -f ReadMe.md | microcule --stream=true ./examples/services/streams/echo.js
+
+# start HTTP servers with mounted streaming functions directly from source files
+
 microcule ./examples/services/echo/echo.js
 microcule -l babel ./examples/services/echo/echo-es6-async.js
 microcule ./examples/services/echo/echo.sh
+microcule ./examples/services/echo/echo.c
+microcule ./examples/services/echo/echo.go
+microcule ./examples/services/hello-world/hello.java
 microcule ./examples/services/echo/echo.lisp
 microcule ./examples/services/echo/echo.lua
 microcule ./examples/services/echo/echo.ml
 microcule ./examples/services/echo/echo.php
 microcule ./examples/services/echo/echo.pl
 microcule ./examples/services/echo/echo.py
+microcule ./examples/services/echo/echo-wsgi.py
 microcule -l python3 ./examples/services/echo/echo-py3.py
+microcule ./examples/services/echo/echo.r
 microcule ./examples/services/echo/echo.rb
+microcule ./examples/services/echo/echo.rs
 microcule ./examples/services/echo/echo.coffee
 microcule ./examples/services/echo/echo.ss
 microcule ./examples/services/echo/echo.st
