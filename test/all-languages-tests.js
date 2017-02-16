@@ -65,6 +65,13 @@ test('attempt to run hello world all languages', function (t) {
       var noCarriageReturn = ["perl", "scheme", "php"];
       if (typeof customResponses[lang] !== 'undefined') {
         t.equal(body, customResponses[lang], 'got correct response from ' + lang);
+      }
+      var doCRLF = ["python", "python3"];
+      var crlf = (process.platform == 'win32')?'\r\n':'\n';
+      if (noCarriageReturn.indexOf(lang) !== -1) {
+        t.equal(body, 'hello world', 'got correct response from ' + lang);
+      } else if (doCRLF.indexOf(lang) !== -1) {
+        t.equal(body, 'hello world'+crlf, 'got correct response from ' + lang);
       } else {
         if (noCarriageReturn.indexOf(lang) !== -1) {
           t.equal(body, 'hello world', 'got correct response from ' + lang);
