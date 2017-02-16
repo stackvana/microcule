@@ -338,6 +338,7 @@ Author:
 Special thanks to:
 
  - [Jordan Harband](https://github.com/ljharb)
- - [Andrew Love](https://github.com/andrewtlove) 
+ - [Andrew Love](https://github.com/andrewtlove)
+ - [pyhedgehog](https://github.com/pyhedgehog) 
 
 for their feedback in helping review early versions of this project.
