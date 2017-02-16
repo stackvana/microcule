@@ -10,4 +10,4 @@ def app(environ, start_response):
     return '\n'.join(res)
 
 if __name__ == '__main__':
-    microcule.HookIOHandler(Hook).run(app)
+    microcule.wsgi(Hook).run(app)

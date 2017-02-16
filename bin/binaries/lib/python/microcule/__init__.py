@@ -89,7 +89,7 @@ class HookIOExceptHook:
         sys.stderr.flush()
 
 
-class HookIOHandler(wsgiref.handlers.CGIHandler):
+class wsgi(wsgiref.handlers.CGIHandler):
     def __init__(self, Hook=None):
         self.Hook = Hook or getattr(sys.modules.get('__main__',sys), 'Hook', None)
         wsgiref.handlers.BaseCGIHandler.__init__(
