@@ -22,6 +22,7 @@
     "hyperquest": "^2.0.0",
     "merge-params": "^1.1.0",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "mschema": "^0.5.6",
     "mustache": "^2.2.1",
     "parse-service-request": "1.2.x",
