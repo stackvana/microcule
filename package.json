@@ -38,7 +38,6 @@
     "express": "^4.14.0",
     "gm": "^1.23.0",
     "microcule-examples": "5.x.x",
-    "multiline": "^1.0.2",
     "octonode": "^0.7.6",
     "request": "^2.75.0",
     "tap": "0.4.11",
