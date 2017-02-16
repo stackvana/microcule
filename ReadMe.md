@@ -143,6 +143,7 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
 
 - **bodyParser** - Intelligent streaming body parser ( JSON / form / multipart / binary )
 - **cronScheduler** - Schedule function calls on a timer using a simple [Cron](https://en.wikipedia.org/wiki/Cron) syntax
+- **compile** - Compile microservice source code into binary ( optional dependency to `spawn` )
 - **logger** - Basic extendable request / response logger function 
 - **mschema** - Adds [mschema](https://github.com/mschema/mschema) validation to incoming request parameters
 - **sourceGithubGist** - Pulls microservice source code from a Github Gist
