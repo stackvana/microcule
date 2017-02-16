@@ -112,12 +112,10 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
  - Service source code is immutable ( unless configured otherwise )
  - Uses build step for compiled langauges
 
-
 ### Versatile
 
  - Can serve any arbitrary binary like `ls`, `tail` as a streaming HTTP microservice
  - Ships with `microcule` binary for starting HTTP microservice servers
-
  - Scripting support for HTTP request / response API ( differs per language )
 
 ### Extendable
@@ -128,7 +126,6 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
  - Provides simple customizable interfaces for programmang language enviroments
  - Simplistic design makes it very easy to write code / create new plugins
 
-
 ### No Containers
   - By design, ships with no container or OS virtualization
   - Will work with any Container or Virtual Machine solutions ( it's your choice! )
@@ -137,10 +134,8 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
 
 [Read more about securing microcule](#security)
 
-
-
 <a name="plugins"></a>
-#### Plugins
+### Plugins
 
 `microcule` can be optionally extended through a simple `app.use()` based plugin architecture. Plugins are standard Node.js Express.js middlewares. This means you can use any existing Node.js middleware as a `microcule` plugin, or re-use any `microcule` plugin as a middleware in any existing Node application.
 
