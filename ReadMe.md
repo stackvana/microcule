@@ -208,13 +208,6 @@ microcule echo "hello world"
 microcule cat ReadMe.md
 microcule tail -f ReadMe.md
 
-# pipe in data from arbitrary commands
-
-echo "hello world" | microcule ./examples/services/echo/echo-stdin.js
-ls | microcule ./examples/services/echo-stdin.js
-ls | microcule ./examples/streams/transform.js
-tail -f ReadMe.md | microcule --stream=true ./examples/services/streams/echo.js
-
 # start HTTP servers with mounted streaming functions directly from source files
 
 microcule ./examples/services/echo/echo.js
@@ -238,6 +231,13 @@ microcule ./examples/services/echo/echo.coffee
 microcule ./examples/services/echo/echo.ss
 microcule ./examples/services/echo/echo.st
 microcule ./examples/services/echo/echo.tcl
+
+# pipe in data from arbitrary commands
+
+echo "hello world" | microcule ./examples/services/echo/echo-stdin.js
+ls | microcule ./examples/services/echo-stdin.js
+ls | microcule ./examples/streams/transform.js
+tail -f ReadMe.md | microcule --stream=true ./examples/services/streams/echo.js
 
 # run full-features microservices as packages
 git clone https://github.com/stackvana/microcule-examples
