@@ -54,12 +54,12 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
    - Source Gist repo
    - Spawn
  - [Command Line Interface Usage](#cli-examples)
- - [Node.js HTTP Middleware Usage](#node-js-middleware-usage)
+ - [Node.js HTTP Middleware Usage](#node-middleware-usage)
  - [Spawning arbitrary compiled binaries](#)
  - [Multiple Microservices Per Server Instance](#)
  - [Security](#security)
  - [100+ Working Code Examples](#examples)
- - [Etymology](#Etymology)
+ - [Etymology](#etymology)
 
 
 ## Introduction
@@ -162,7 +162,9 @@ Since plugins are standard Node.js middlewares, writing [custom plugins](#custom
 
 ## Languages
 
-`microcule` supports 20+ programming languages. The best way to get started is to see the [100+ Microcule Examples](https://github.com/stackvana/microcule-examples)
+`microcule` supports 20+ programming languages. The best way to get started is to visit [100+ Microcule Examples](https://github.com/stackvana/microcule-examples).
+
+Want to see a new language added? Simply open a pull request or [open an issue](https://github.com/stackvana/microcule/issues). We are glad to add it!
 
 ## Installation
 
@@ -241,9 +243,9 @@ Service target language is automatically detected based on the file extension of
 *Note: Please see [Babel Support](#babel) for additional Babel configuration*
 
 
-### Node.js Middleware Usage
+### Node Middleware Usage
 
-`microcule` is designed to work as standard HTTP middlewares.
+`microcule` is designed to work as set of standard Node.js HTTP middlewares. This is very useful and universal in that you can re-use any existing Node.js tooling ( like Express.js middlewares ) with any microcule plugins ( like `spawn` or `compile` ).
 
 #### Examples
 
