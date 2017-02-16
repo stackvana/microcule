@@ -13,7 +13,7 @@ microcule = require('../');
 // or should it also include microcule-examples echo tests?
 var languages = ['bash', 'gcc', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'go', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'rust', 'r', 'scheme', 'tcl'];
 
-test('attempt to require microservice-examples module', function (t) {
+test('attempt to require microcule-examples module', function (t) {
   examples = require('microcule-examples');
   t.equal(typeof examples.services, "object", "returned services object");
   t.end();

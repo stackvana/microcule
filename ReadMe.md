@@ -16,11 +16,11 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Features](#features)
    - [Modular](#modular)
    - [Universal](#universal)
-   - [Intelligent HTTP Request Parsing](#tntelligent-http-request-parsing)
+   - [Intelligent HTTP Request Parsing](#intelligent-http-request-parsing)
    - [Consistent](#consistent)
-   - [Extendable](#eniversal)
-   - [Veristile](#veristile)
-   - [Containers / Isolation](#containers-isolation)
+   - [Extendable](#Extendable)
+   - [Versatile](#Versatile)
+   - [No Containers](#no-containers)
  - [Languages](#languages)
    - c ( with `gcc` )
    - java
@@ -57,9 +57,9 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Node.js HTTP Middleware Usage](#node-js-middleware-usage)
  - [Spawning arbitrary compiled binaries](#)
  - [Multiple Microservices Per Server Instance](#)
+ - [Security](#security)
  - [100+ Working Code Examples](#examples)
  - [Etymology](#Etymology)
-
 
 
 ## Introduction
@@ -114,7 +114,7 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
  - Uses build step for compiled langauges
 
 
-### Veristile
+### Versatile
 
  - Can serve any arbitrary binary like `ls`, `tail` as a streaming HTTP microservice
  - Ships with `microcule` binary for starting HTTP microservice servers
@@ -130,9 +130,9 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
  - Simplistic design makes it very easy to write code / create new plugins
 
 
-### Containers / Isolation
-  - Ships with no container or OS virtualization
-  - By design, requires no Container or Virtual Machine solutions ( it's your choice! )
+### No Containers
+  - By design, ships with no container or OS virtualization
+  - Will work with any Container or Virtual Machine solutions ( it's your choice! )
   - Isolates state of microservice per system process and request ( stateless service requests )
   - Handles Microservice error handling and custom timeouts
 
@@ -159,6 +159,10 @@ Even binary data works great! Here is an example of resizing in image in JavaScr
 For Express based plugins example, see: `./examples/express-plugins.js`
 
 Since plugins are standard Node.js middlewares, writing [custom plugins](#customPlugins) is very easy.
+
+## Languages
+
+`microcule` supports 20+ programming languages. The best way to get started is to see the [100+ Microcule Examples](https://github.com/stackvana/microcule-examples)
 
 ## Installation
 
@@ -187,15 +191,13 @@ Since plugins are standard Node.js middlewares, writing [custom plugins](#custom
 
 By default, `microcule` will attempt to start a listening HTTP server based on a microservice file path.
 
-### As Command Line Interface
+### Basic Command Line Usage
 
-microcule ./path/to/script.foo
+  microcule ./path/to/scriptOrBinary.foo
 
-### 70+ Microservice Examples
+### 100+ Microservice Examples
 
-You can find many example microservices which can be run with microcule here:
-
-https://github.com/Stackvana/microservice-examples
+[Here can find many example microservices which can be run with microcule](https://github.com/Stackvana/microcule-examples)
 
 #### CLI Examples
 
@@ -228,7 +230,7 @@ cd microcule-examples/javascript-echo
 microcule .
 
 ```
-see: [microservice-examples](https://github.com/Stackvana/microservice-examples) for 50+ examples
+see: [microcule-examples](https://github.com/Stackvana/microcule-examples) for 100+ examples
 
 Each call to `microcule` will automatically start a listening HTTP server on port `3000`, additional instances of `microcule` will auto-increment the port to `3001`, `3002`, etc.
 
