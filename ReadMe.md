@@ -1,6 +1,6 @@
 # Microcule
 
-<img src="https://travis-ci.org/Stackvana/microcule.svg" alt="build:">
+<a href="https://travis-ci.org/Stackvana/microcule"><img src="https://travis-ci.org/Stackvana/microcule.svg" alt="build:"></a>
 
 Software Development Kit and Command Line Interface for spawning streaming stateless HTTP [microservices](http://martinfowler.com/articles/microservices.html) for any programming language or arbitrary binary.
 
@@ -80,7 +80,6 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 ### Modular
 
 Only require the functionality you need.
-
 
 `microcule` [itself](https://github.com/Stackvana/microcule/blob/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
 
