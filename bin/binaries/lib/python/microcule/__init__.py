@@ -14,19 +14,19 @@ class FullMicroculeJSONFormatter(logging.Formatter):
         record = record.__dict__.copy()
         record['exc_info'] = None
         try:
-            json.dumps(record['args'])
+            json.dumps(record['args'], ensure_ascii=True)
         except Exception:
             del record['args']
             record['msg'] = record['message']
         res = {'type': 'log', 'payload': {'entry': record}}
-        return json.dumps(res)
+        return json.dumps(res, ensure_ascii=True)
 
 
 class SimpleMicroculeJSONFormatter(logging.Formatter):
     def format(self, record):
         msg = logging.Formatter.format(self, record)
         res = {'type': 'log', 'payload': {'entry': msg}}
-        return json.dumps(res)
+        return json.dumps(res, ensure_ascii=True)
 
 
 class MicroculeExceptHook:
@@ -48,15 +48,31 @@ class MicroculeExceptHook:
             code = info[0].__module__ + '.' + code
         payload = {'code': code}
         if hasattr(info[1], 'args'):
-            payload['args'] = repr(info[1].args)
+            try:
+                payload['args'] = json.dumps(info[1].args, ensure_ascii=True)
+            except Exception:
+                payload['args'] = '!'+repr(info[1].args)
         if self.verbose:
             payload['error'] = ''.join(traceback.format_exception(*info))
         else:
             payload['error'] = str(info[1])
         res = {'type': 'error', 'payload': payload}
-        if isinstance(info[1], ImportError) and info[1].message.startswith('No module named '):
-            payload['code'] = 'MODULE_NOT_FOUND'
-            payload['module'] = info[1].message.replace('No module named ', '')
+        if isinstance(info[1], ImportError):
+            name = None
+            if hasattr(info[1],'name'):
+                name = info[1].name
+            elif str(info[1]).startswith('No module named '):
+                name = str(info[1]).replace('No module named ', '')
+                if name[:1] == name[-1:] == "'":
+                    name = name[1:-1]
+            if name:
+                payload['code'] = 'MODULE_NOT_FOUND'
+                payload['module'] = name
+                error = '%s(%s): %s' % (payload['code'], code, str(info[1]))
+                if self.verbose:
+                    payload['error'] += error
+                else:
+                    payload['error'] = error
         if isinstance(info[1], (pkg_resources.VersionConflict, pkg_resources.DistributionNotFound)):
             req = None
             try:
@@ -78,22 +94,25 @@ class MicroculeExceptHook:
                     payload['error'] += error
                 else:
                     payload['error'] = error
-        sys.stderr.write(json.dumps(res)+'\n')
+        sys.stderr.write(json.dumps(res, ensure_ascii=True)+'\n')
         sys.stderr.flush()
-        sys.stderr.write(json.dumps({'type': 'statusCode', 'payload': {'value': 500}})+'\n')
+        sys.stderr.write(json.dumps({'type': 'statusCode', 'payload': {'value': 500}}, ensure_ascii=True)+'\n')
         sys.stderr.flush()
         if self.display:
             sys.stdout.write(payload['error'].rstrip('\n')+'\n')
             sys.stdout.flush()
-        sys.stderr.write(json.dumps({'type': 'end'})+'\n')
+        sys.stderr.write(json.dumps({'type': 'end'}, ensure_ascii=True)+'\n')
         sys.stderr.flush()
 
 
 class wsgi(wsgiref.handlers.CGIHandler):
     def __init__(self, Hook=None):
         self.Hook = Hook or getattr(sys.modules.get('__main__',sys), 'Hook', None)
+        stdout = sys.stdout
+        if hasattr(stdout, 'buffer'):
+            stdout = stdout.buffer
         wsgiref.handlers.BaseCGIHandler.__init__(
-            self, sys.stdin, sys.stdout, sys.stderr, {},
+            self, sys.stdin, stdout, sys.stderr, {},
             multithread=False, multiprocess=True
         )
 
@@ -101,7 +120,7 @@ class wsgi(wsgiref.handlers.CGIHandler):
         self.cleanup_headers()
         self.headers_sent = True
         head = {'type': 'writeHead', 'payload': {'code': self.status, 'headers': dict(self.headers)}}
-        sys.stderr.write(json.dumps(head)+'\n')
+        sys.stderr.write(json.dumps(head, ensure_ascii=True)+'\n')
         sys.stderr.flush()
 
     def add_cgi_vars(self):
@@ -174,7 +193,10 @@ def parse_argv(argv=None):
     # print(argv[5]) # -s
     # print(argv[6]) # the service
     # TODO: do something with service variable
-    service = argv[6]
+    service = json.loads(argv[6])
+
+    if 'file' in service:
+      code = compile(code, service['file'], 'exec')
 
     debug_output = 'gateway' in Hook['resource'].get('name', 'gateway')
     prod_mode = Hook['resource'].get('mode', 'Debug') == 'Production'

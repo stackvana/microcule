@@ -9,6 +9,14 @@ def __prepare():
     # print(sys.argv)
     # print(sys.path)
 
+    if hasattr(sys.stdout, 'encoding') and not sys.stdout.encoding:
+        sys.stdout.flush()
+        import codecs
+        out = sys.stdout
+        sys.stdout = codecs.getwriter('UTF-8')(out, 'backslashreplace')
+        sys.stdout.encoding = 'UTF-8'
+        sys.stdout.buffer = out
+
     import microcule
 
     code, service, Hook = microcule.parse_argv()
