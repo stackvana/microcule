@@ -301,6 +301,9 @@ serviceEnv.isStreaming = env.isStreaming;
 serviceEnv.customTimeout = env.customTimeout;
 serviceEnv.debug = debug;
 
+// Suppress DeprecationWarning logging
+process.noDeprecation = true;
+
 rs({
   service: code,
   env: serviceEnv,
