@@ -35,11 +35,14 @@
     "view": "1.0.0"
   },
   "devDependencies": {
+    "basic-auth": "^1.1.0",
     "colors": "*",
     "express": "^4.14.0",
     "gm": "^1.23.0",
     "microcule-examples": "5.x.x",
     "octonode": "^0.7.6",
+    "passport": "^0.3.2",
+    "passport-github": "^1.1.0",
     "request": "^2.75.0",
     "tap": "0.4.11",
     "tape": "^4.6.0"
