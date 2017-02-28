@@ -259,7 +259,11 @@ function startServer (_service) {
               language: service.language,
               config: config,
               log: console.log
-            })(req, output, next);
+            })(req, output, function(){
+              // if we made it here, it means no services called res.end()
+              // we should end the service ( or else it will hang forever )
+              res.end();
+            });
           });
         } else {
           microcule.plugins.spawn({
@@ -273,7 +277,11 @@ function startServer (_service) {
             language: service.language,
             config: config,
             log: console.log
-          })(req, res, next);
+          })(req, res, function(){
+            // if we made it here, it means no services called res.end()
+            // we should end the service ( or else it will hang forever )
+            res.end();
+          });
         }
       }
     });

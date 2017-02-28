@@ -23,6 +23,10 @@ test('attempt to create microservice spawn handler', function (t) {
 test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
   app.use(handler);
+  // Required for non-js services ( or else response will not end )
+  app.use(function(req, res){
+    res.end();
+  });
   server = app.listen(3000, function () {
     t.equal(typeof handler, "function", "created listening HTTP server")
     t.end();
