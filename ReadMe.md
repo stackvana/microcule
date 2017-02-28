@@ -329,7 +329,7 @@ var handler = microcule.plugins.spawn({
 
 ## Chaining Services as Middlewares
 
-Since `v5.0.0` and above, `microcule` is able to compose multiple functions together as middlewares to create composite functionality. Since every service is dealing with streaming http, it's easy to chain them in a row.
+Since `v5.1.0` and above, `microcule` is able to compose multiple functions together as middlewares to create composite functionality. Since every service is dealing with streaming http, it's easy to chain them in a row.
 
 In order to chain multiple services, simply call them as standard Node.js middlewares in the order you want them to execute.
 
