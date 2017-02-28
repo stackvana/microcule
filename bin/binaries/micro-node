@@ -294,6 +294,7 @@ psr(process.stdin, output, function (req, res, fields) {
   }
 */
 
+/* Remark: Removed for now, not needed yet?
 // pipe3 is an additional STDIO pipe we can use for HTTP request / response methods
 // it's currently being used to handle incoming request.end and request.close events
 var pipe3 = new net.Socket({ fd: 3 });
@@ -306,6 +307,7 @@ pipe3.on('data', function (buf) {
     process.stdin.emit('end');
   }
 });
+*/
 
 /* TODO: add ability to proxy request parameters to middleware chain
 var proxy = new Proxy(process.stdin, {
