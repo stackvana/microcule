@@ -23,7 +23,7 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Languages](#languages)
    - c ( with `gcc` )
    - java
-   - javascript
+   - javascript ( first-class support )
    - babel ( ES6 / ES7 / etc ... )
    - coffee-script
    - common lisp
@@ -55,6 +55,7 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Command Line Interface Usage](#cli-examples)
  - [Node.js HTTP Middleware Usage](#node-middleware-usage)
  - [Spawning arbitrary compiled binaries](#)
+ - [Chaining Services as Middlewares](#chaining-services-as-middlewares)
  - [Multiple Microservices Per Server Instance](#)
  - [Security](#security)
  - [100+ Working Code Examples](#examples)
@@ -63,7 +64,7 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
 
 ## Introduction
 
-At it's core, `microcule` maps HTTP request response streams to the STDIN STDOUT streams of a function in any arbitrary programming language or any compiled binary. It's reminiscent of [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizes additional STDIO streams, does not attempt to parse STDOUT for HTTP response methods. microcule is an old concept rethought and improved with the latest industry standard toolings.
+At it's core, `microcule` maps HTTP request response streams to the STDIN STDOUT streams of a function in any arbitrary programming language or any compiled binary. It's reminiscent of [CGI](https://en.wikipedia.org/wiki/Common_Gateway_Interface), but utilizes additional STDIO streams, does not attempt to parse STDOUT for HTTP response methods, and ships with streaming plugins for extending your microservices. microcule is an old concept rethought and improved with the latest industry standard toolings.
 
 If you are using Amazon Lambda or other cloud function hosting services like Google Functions or [hook.io](http://hook.io), you might find `microcule` a very interesting option to remove your dependency on third-party cloud providers. microcule allows for local deployment of enterprise ready microservices. microcule has few dependencies and will run anywhere Node.js can run.
 
@@ -127,10 +128,10 @@ Even binary data works great! Here is an example of resizing in image in [JavaSc
 
 ### No Containers
 
-  - By design, ships with no container or OS virtualization
+  - By design, `microcule` ships with no container or OS virtualization
   - Since it makes no assumptions about worker environment, `microcule` will work with any Container or Virtual Machine solutions
   - Isolates state of microservice per system process and request ( stateless service requests )
-  - Handles Microservice error handling and custom timeouts
+  - Handles Microservice error handling and timeouts
 
 [Read more about securing microcule](#security)
 
@@ -325,6 +326,22 @@ var handler = microcule.plugins.spawn({
   argv: ['hello', 'world']
 });
 ```
+
+## Chaining Services as Middlewares
+
+Since `v5.0.0` and above, `microcule` is able to compose multiple functions together as middlewares to create composite functionality. Since every service is dealing with streaming http, it's easy to chain them in a row.
+
+In order to chain multiple services, simply call them as standard Node.js middlewares in the order you want them to execute.
+
+```js
+app.use([logger(), basicAuthHandler, bashServiceHandler, nodeServiceHandlerA, nodeServiceHandlerB], function (req, res) {
+  console.log("No services ended response, made it to end");
+  // It's good to have a catch-all handler at the end in case none the services ended the request
+  res.end('caught end')
+});
+```
+
+For full example see: `./examples/express-chain-services.js`
 
 ## Multiple Microservices Per Server Instance
 
