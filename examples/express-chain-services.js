@@ -14,6 +14,9 @@ var nodeServiceB = function testService (req, res, next) {
   res.end('ended request');
 };
 
+var bashService = 'echo "hello bash"'
+
+
 var handlerA = microcule.plugins.spawn({
   code: nodeService,
   language: "javascript"
@@ -24,9 +27,15 @@ var handlerB = microcule.plugins.spawn({
   language: "javascript"
 });
 
+var bashHandler = microcule.plugins.spawn({
+  code: bashService,
+  language: "bash"
+});
+
+
 var logger = microcule.plugins.logger;
 
-app.use([logger(), handlerA, handlerB], function (req, res) {
+app.use([logger(), bashHandler, handlerA, handlerB], function (req, res) {
   console.log("No middlewares ended response, made it to end");
   res.end('caught end')
 });
