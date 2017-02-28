@@ -2,6 +2,7 @@
 var test = require("tape");
 var express = require('express');
 var request = require('request');
+var async = require('async');
 
 var microcule, handler, app, server, examples;
 
@@ -47,7 +48,9 @@ test('attempt to start server with handlers for all languages', function (t) {
       language: lang,
       code: service.code
     });
-    app.use('/' + lang, handler);
+    app.use('/' + lang, handler, function(req, res){
+      res.end();
+    });
     t.equal(typeof handler, "function", "/" + lang + " HTTP endpoint added");
   });
   server = app.listen(3000, function () {
@@ -56,11 +59,12 @@ test('attempt to start server with handlers for all languages', function (t) {
 });
 
 test('attempt to run hello world all languages', function (t) {
-  t.plan(languages.length);
+
   var customResponses = {
     'r': '[1] "hello world"\n'
   };
-  languages.forEach(function (lang) {
+
+  async.eachSeries(languages, function iter (lang, next) {
     request('http://localhost:3000/' + lang, function (err, res, body) {
       var customResponses = {
         "r": '[1] "hello world"\n'
@@ -68,6 +72,7 @@ test('attempt to run hello world all languages', function (t) {
       var noCarriageReturn = ["perl", "scheme", "php"];
       if (typeof customResponses[lang] !== 'undefined') {
         t.equal(body, customResponses[lang], 'got correct response from ' + lang);
+        next();
         return;
       }
       var doCRLF = ["python", "python3"];
@@ -83,8 +88,10 @@ test('attempt to run hello world all languages', function (t) {
           t.equal(body, 'hello world\n', 'got correct response from ' + lang);
         }
       }
-
+      next();
     });
+  }, function complete (err) {
+    t.end();
   });
 });
 // TODO: request params test with JSON / language specific output
