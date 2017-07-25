@@ -16,6 +16,11 @@ var handler = microcule.plugins.spawn({
 
 app.use(handler);
 
+// in-case we didn't end the response in the python script, create a middleware at the end of the request to catch and close the response
+app.use(function (req, res) {
+  res.end();
+});
+
 app.listen(config.http.port, function () {
   console.log('server started on port '+config.http.port);
 });
