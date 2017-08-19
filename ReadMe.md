@@ -82,7 +82,7 @@ You are encouraged to use this module as-is, or modify it to suite your needs. I
 
 Only require the functionality you need.
 
-`microcule` [itself](https://github.com/Stackvana/microcule/blob/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
+`microcule` [itself](https://github.com/Stackvana/microcule/blob/master/index.js) is actually just a collection of HTTP middleware [Plugins](#plugins) presented as a CLI tool. This is essential, as all it's features and functionality are de-coupled with an industry standard API. You are encouraged to use the `microcule` binary shipped with this project, or use microcule plugins programmatically in your existing application.
 
 ### Universal
 
