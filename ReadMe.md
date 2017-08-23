@@ -57,6 +57,7 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Spawning arbitrary compiled binaries](#)
  - [Chaining Services as Middlewares](#chaining-services-as-middlewares)
  - [Multiple Microservices Per Server Instance](#)
+ - [SSL/HTTPS](#ssl)
  - [Security](#security)
  - [100+ Working Code Examples](#examples)
  - [Etymology](#etymology)
@@ -376,6 +377,25 @@ module.exports = function loggerMiddleware (config) {
 Once you've created a new plugin, simply `require()` it, and call `app.use(customLogger({}))`. That's it! There are no magic or surprises with how plugins work in `microcule`.
 
 See: `./examples/express-plugins.js` for more details.
+
+## SSL
+
+If you wish to start HTTPS SSL enabled services, simply adjust the following configuration properties in `./config/index.js`
+
+```bash
+
+{
+  http: {
+    https: true, // enables https / ssl, requires key, cert, ca
+    key: "ssl key as string",
+    cert: "ssl cert as string",
+    ca: "ssl ca as string",
+    sslRequired: false, // redirects all http traffic to https, optional
+    onlySSL: false // will only start https server with no unprotected http interface, optional
+  }
+}
+
+```
 
 ## Security
 
