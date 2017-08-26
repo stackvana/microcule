@@ -73,7 +73,7 @@ if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
 }
 
 if (stdin.isTTY) {
-   console.log('ignoring will not run in TTY mode')
+  //console.log('ignoring will not run in TTY mode')
   // helps with peformance of STDIN tool
   http = require('resource-http');
   startServer(_service);
@@ -152,6 +152,7 @@ function startSTDIN (service) {
       presenter: service.presenter,
       releaseDir: config.releaseDir,
       language: service.language,
+      sourceCodeFilePath: service.sourceCodeFilePath,
       config: config,
       log: console.log
     })(stdin, output, function(){
@@ -176,6 +177,7 @@ function startSTDIN (service) {
         presenter: service.presenter,
         releaseDir: config.releaseDir,
         language: service.language,
+        sourceCodeFilePath: service.sourceCodeFilePath,
         config: config,
         log: console.log
       })(stdin, output, function(){
@@ -259,6 +261,7 @@ function startServer (_service) {
               presenter: service.presenter,
               releaseDir: config.releaseDir,
               language: service.language,
+              sourceCodeFilePath: service.sourceCodeFilePath,
               config: config,
               log: console.log
             })(req, output, function(){
@@ -277,6 +280,7 @@ function startServer (_service) {
             presenter: service.presenter,
             releaseDir: config.releaseDir,
             language: service.language,
+            sourceCodeFilePath: service.sourceCodeFilePath,
             config: config,
             log: console.log
           })(req, res, function(){
