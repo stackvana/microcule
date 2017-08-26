@@ -32,7 +32,8 @@
     "stream-buffers": "^3.0.1",
     "through2": "^2.0.1",
     "tree-kill": "^1.1.0",
-    "view": "1.0.0"
+    "view": "1.0.0",
+    "ncp":"^2.0.0"
   },
   "devDependencies": {
     "basic-auth": "^1.1.0",
