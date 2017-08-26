@@ -15,9 +15,7 @@ config.http.port = argv.p ||  argv.port || config.http.port;
 config.watch = argv.w ||  argv.watch || config.watch;
 config.stream = argv.s ||  argv.stream || config.stream;
 
-// default to releasing compiled binaries to current working directory of `microcule` binary
-
-// Doesn't seem to pick up `releaseDir` from config
+// If no config, default to releasing compiled binaries to current working directory of `microcule` binary
 config.releaseDir = config.releaseDir || process.cwd();
 
 if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
