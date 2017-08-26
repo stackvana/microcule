@@ -3,3 +3,17 @@ node_modules/
 __pycache__/
 *.pyc
 *.pyo
+
+
+# .NET Core build assets
+tmp/dotnet/
+release/dotnet/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
