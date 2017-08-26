@@ -52,6 +52,8 @@ try {
 }
 
 
+// pipe3 is an additional STDIO pipe we can use for HTTP response methods, debugging events, logging events, and other out of band comms
+var pipe3 = new net.Socket({ fd: 3 });
 
 // babel support for es6 / es7
 // the spawned child needs regenerator run-time here
@@ -84,7 +86,7 @@ output.addTrailers = function (headers) {
       "headers": headers
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.removeHeader = function (name) {
@@ -94,7 +96,7 @@ output.removeHeader = function (name) {
       "name": name
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.setHeader = function (name, value) {
@@ -105,7 +107,7 @@ output.setHeader = function (name, value) {
       "value": value
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.setTimeout = function (msecs, cb) {
@@ -116,7 +118,7 @@ output.setTimeout = function (msecs, cb) {
       "msecs": msecs
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.sendDate = function (value) {
@@ -126,7 +128,7 @@ output.sendDate = function (value) {
       "value": value
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.statusMessage = function (value) {
@@ -136,7 +138,7 @@ output.statusMessage = function (value) {
       "value": value
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 // Using Object.defineProperty
@@ -148,7 +150,7 @@ Object.defineProperty(output, 'statusCode', {
         "value": value
       }
     };
-    console.error(JSON.stringify(message));
+    pipe3.write(JSON.stringify(message));
   }
 });
 
@@ -158,7 +160,7 @@ output.writeContinue = function () {
     "payload": {
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 output.writeHead = function (code, headers) {
@@ -169,12 +171,12 @@ output.writeHead = function (code, headers) {
       "headers": headers
     }
   };
-  console.error(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message));
 };
 
 // Capture any stream errors
-output.on('error', function(err){
-  console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+output.on('error', function (err) {
+  pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
   process.exit();
 });
 
@@ -184,7 +186,7 @@ output.json = function json (data) {
   if (typeof data !== 'undefined') {
     console.log(JSON.stringify(data, true, 2));
   }
-  console.error(JSON.stringify({ type: "end" }));
+  pipe3.write(JSON.stringify({ type: "end" }));
   process.exit();
 };
 
@@ -193,14 +195,14 @@ output.end = function end (data) {
   if (typeof data !== 'undefined') {
     console.log(data);
   }
-  console.error(JSON.stringify({ type: "end" }));
+  pipe3.write(JSON.stringify({ type: "end" }));
   process.exit();
 };
 
 // Custom errorHandler for `run-service` execution
 function errorHandler (err) {
   if (err) {
-    console.error(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+    pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
     process.exit();
   }
 };
@@ -231,7 +233,6 @@ process.stdin.url = env.input.url;
 process.stdin.connection = env.input.connection;
 process.stdin.resource = { params: {}};
 
-
 // Send logs to stderr as JSON message
 var debug = function debug () {
   var args = [];
@@ -241,7 +242,7 @@ var debug = function debug () {
   if (args.length === 1) {
     args = args[0];
   }
-  console.error(JSON.stringify({ type: "log", payload: { entry: args } }));
+  pipe3.write(JSON.stringify({ type: "log", payload: { entry: args } }));
   return;
 };
 
@@ -294,20 +295,6 @@ psr(process.stdin, output, function (req, res, fields) {
   }
 */
 
-/* Remark: Removed for now, not needed yet?
-// pipe3 is an additional STDIO pipe we can use for HTTP request / response methods
-// it's currently being used to handle incoming request.end and request.close events
-var pipe3 = new net.Socket({ fd: 3 });
-pipe3.on('data', function (buf) {
-  var str = buf.toString();
-  if (str.search('input.close') !== -1) {
-    process.stdin.emit('close');
-  }
-  if (str.search('input.end') !== -1) {
-    process.stdin.emit('end');
-  }
-});
-*/
 
 /* TODO: add ability to proxy request parameters to middleware chain
 var proxy = new Proxy(process.stdin, {
@@ -323,7 +310,7 @@ var proxy = new Proxy(process.stdin, {
     //console.log("Setting property '" + name + "', initial value: " + value);
     if (!(name in target)) {
       //   console.log("Setting non-existant property '" + name + "', initial value: " + value);
-      console.error(JSON.stringify({ type: "setvar", payload: { key: name, value: value } }));
+      pipe3.write(JSON.stringify({ type: "setvar", payload: { key: name, value: value } }));
     }
     target[name] = value;
     return true;
@@ -334,7 +321,7 @@ var proxy = new Proxy(process.stdin, {
 /* TODO: add ability to send proxied params back to parent process
   // sets key value on input stream ( useful for middleware processing later )
   process.stdin.set = function (key, value) {
-    console.error(JSON.stringify({ type: "setvar", payload: { key: key, value: value } }));
+    pipe3.write(JSON.stringify({ type: "setvar", payload: { key: key, value: value } }));
   };
 */
 
