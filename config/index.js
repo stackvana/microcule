@@ -10,10 +10,12 @@ module.exports = {
     ca: [fs.readFileSync(__dirname + '/ssl/ca-crt.pem').toString()],
     sslRequired: true, // redirects all http traffic to https, optional
     onlySSL: false // will only start https server with no unprotected http interface, optional
+    
   },
   SERVICE_MAX_TIMEOUT: 10000,
   messages: {
     childProcessSpawnError: require('./messages/childProcessSpawnError'),
     serviceExecutionTimeout: require('./messages/serviceExecutionTimeout')
-  }
+  },
+  releaseDir: process.cwd() + '/release'
 };
