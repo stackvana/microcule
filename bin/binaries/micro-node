@@ -86,7 +86,7 @@ output.addTrailers = function (headers) {
       "headers": headers
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.removeHeader = function (name) {
@@ -96,7 +96,7 @@ output.removeHeader = function (name) {
       "name": name
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.setHeader = function (name, value) {
@@ -107,7 +107,7 @@ output.setHeader = function (name, value) {
       "value": value
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.setTimeout = function (msecs, cb) {
@@ -118,7 +118,7 @@ output.setTimeout = function (msecs, cb) {
       "msecs": msecs
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.sendDate = function (value) {
@@ -128,7 +128,7 @@ output.sendDate = function (value) {
       "value": value
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.statusMessage = function (value) {
@@ -138,7 +138,7 @@ output.statusMessage = function (value) {
       "value": value
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 // Using Object.defineProperty
@@ -150,7 +150,7 @@ Object.defineProperty(output, 'statusCode', {
         "value": value
       }
     };
-    pipe3.write(JSON.stringify(message));
+    pipe3.write(JSON.stringify(message) + '\n');
   }
 });
 
@@ -160,7 +160,7 @@ output.writeContinue = function () {
     "payload": {
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 output.writeHead = function (code, headers) {
@@ -171,7 +171,7 @@ output.writeHead = function (code, headers) {
       "headers": headers
     }
   };
-  pipe3.write(JSON.stringify(message));
+  pipe3.write(JSON.stringify(message) + '\n');
 };
 
 // Capture any stream errors
