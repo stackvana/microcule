@@ -19,8 +19,8 @@ config.stream = argv.s ||  argv.stream || config.stream;
 config.releaseDir = config.releaseDir || process.cwd();
 
 if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
-  var pkg = require('../package.json')
-  console.log(pkg.version)
+  var pkg = require('../package.json');
+  console.log(pkg.version);
   process.exit();
 }
 
@@ -48,6 +48,10 @@ var _service;
 
 try {
   _service = requireServiceSync({ path: servicePath });
+
+  //console.log('#### microcule: requireServiceSync() ######');
+  //console.dir(_service);
+
 } catch (err) {
   if (err.code === 'ENOENT') {
     // if we could not find the service, attempt to see if it's a globally available binary
@@ -109,6 +113,7 @@ function startSTDIN (service) {
     mode: 'stream'
   };
 
+
   var Readable = require('stream').Readable;
   var Writable = require('stream').Writable;
 
@@ -145,12 +150,12 @@ function startSTDIN (service) {
       bin: service.bin,
       argv: service.argv,
       code: service.code,
+      originalCodeFilePath: service.originalCodeFilePath,
       schema: service.schema,
       view: service.view,
       presenter: service.presenter,
       releaseDir: config.releaseDir,
       language: service.language,
-      sourceCodeFilePath: service.sourceCodeFilePath,
       config: config,
       log: console.log
     })(stdin, output, function(){
@@ -170,12 +175,12 @@ function startSTDIN (service) {
         bin: service.bin,
         argv: service.argv,
         code: service.code,
+        originalCodeFilePath: service.originalCodeFilePath,
         schema: service.schema,
         view: service.view,
         presenter: service.presenter,
         releaseDir: config.releaseDir,
         language: service.language,
-        sourceCodeFilePath: service.sourceCodeFilePath,
         config: config,
         log: console.log
       })(stdin, output, function(){
@@ -210,7 +215,7 @@ function startServer (_service) {
       console.log('using presenter for service')
     }
 
-    console.log(_service.language + ' microcule started at: http://' +  addr.address + ":" + addr.port);
+    console.log(_service.language + ' microcule started at: http://'.blue +  addr.address + ":" + addr.port);
 
     // Remark: Will automatically map the process.env `microcule` was spawned in to the service.env of the spawned function
     config.env = process.env;
@@ -235,9 +240,11 @@ function startServer (_service) {
           spawnService(__service);
         });
         */
+        console.log('1'.red);
         spawnService(requireServiceSync({ path: servicePath }));
       } else {
-        spawnService(_service)
+        console.log('2'.red);
+        spawnService(_service);
       }
 
       function spawnService (service) {
@@ -250,16 +257,17 @@ function startServer (_service) {
             if (err) {
               return next(err);
             }
+            console.log('3'.red);
             microcule.plugins.spawn({
               bin: service.bin,
               argv: service.argv,
               code: service.code,
+              originalCodeFilePath: service.originalCodeFilePath,
               schema: service.schema,
               view: service.view,
               presenter: service.presenter,
               releaseDir: config.releaseDir,
               language: service.language,
-              sourceCodeFilePath: service.sourceCodeFilePath,
               config: config,
               log: console.log
             })(req, output, function(){
@@ -269,16 +277,17 @@ function startServer (_service) {
             });
           });
         } else {
+          console.log('4'.red);
           microcule.plugins.spawn({
             bin: service.bin,
             argv: service.argv,
             code: service.code,
+            originalCodeFilePath: service.originalCodeFilePath,
             schema: service.schema,
             view: service.view,
             presenter: service.presenter,
             releaseDir: config.releaseDir,
             language: service.language,
-            sourceCodeFilePath: service.sourceCodeFilePath,
             config: config,
             log: console.log
           })(req, res, function(){
