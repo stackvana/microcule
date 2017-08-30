@@ -10,7 +10,7 @@ var service = {
 var spawn = microcule.plugins.spawn(service);
 
 app.use(function(req, res, next){
-  console.log('attempting to spawn', service)
+  console.log('[express-compiled-languages.js] attempting to spawn ', service)
   spawn(req, res, next);
 });
 

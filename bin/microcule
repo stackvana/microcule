@@ -15,12 +15,12 @@ config.http.port = argv.p ||  argv.port || config.http.port;
 config.watch = argv.w ||  argv.watch || config.watch;
 config.stream = argv.s ||  argv.stream || config.stream;
 
-// default to releasing compiled binaries to current working directory of `microcule` binary
+// If no config, default to releasing compiled binaries to current working directory of `microcule` binary
 config.releaseDir = config.releaseDir || process.cwd();
 
 if (typeof argv.v !== "undefined" || typeof argv.version !== "undefined") {
-  var pkg = require('../package.json')
-  console.log(pkg.version)
+  var pkg = require('../package.json');
+  console.log(pkg.version);
   process.exit();
 }
 
@@ -48,6 +48,10 @@ var _service;
 
 try {
   _service = requireServiceSync({ path: servicePath });
+
+  //console.log('#### microcule: requireServiceSync() ######');
+  //console.dir(_service);
+
 } catch (err) {
   if (err.code === 'ENOENT') {
     // if we could not find the service, attempt to see if it's a globally available binary
@@ -71,7 +75,7 @@ if (typeof argv.l !== "undefined" || typeof argv.language !== "undefined") {
 }
 
 if (stdin.isTTY) {
-  // console.log('ignoring will not run in TTY mode')
+  //console.log('ignoring will not run in TTY mode')
   // helps with peformance of STDIN tool
   http = require('resource-http');
   startServer(_service);
@@ -109,6 +113,7 @@ function startSTDIN (service) {
     mode: 'stream'
   };
 
+
   var Readable = require('stream').Readable;
   var Writable = require('stream').Writable;
 
@@ -116,7 +121,7 @@ function startSTDIN (service) {
   var output = Writable();
 
   output._write = function (chunk, enc, next) {
-    // console.log('wirtint out',chunk.toString());
+     console.log('wirtint out',chunk.toString());
     process.stdout.write(chunk);
     next();
   };
@@ -145,6 +150,7 @@ function startSTDIN (service) {
       bin: service.bin,
       argv: service.argv,
       code: service.code,
+      originalCodeFilePath: service.originalCodeFilePath,
       schema: service.schema,
       view: service.view,
       presenter: service.presenter,
@@ -153,7 +159,7 @@ function startSTDIN (service) {
       config: config,
       log: console.log
     })(stdin, output, function(){
-      // console.log("COMPLETED STREAMING SERVICE")
+       console.log("COMPLETED STREAMING SERVICE")
     });
   } else {
     var result = '';
@@ -164,11 +170,12 @@ function startSTDIN (service) {
           STDIN: result
         }
       };
-      // console.log('spawning service'.yellow)
+       console.log('spawning service'.yellow)
       microcule.plugins.spawn({
         bin: service.bin,
         argv: service.argv,
         code: service.code,
+        originalCodeFilePath: service.originalCodeFilePath,
         schema: service.schema,
         view: service.view,
         presenter: service.presenter,
@@ -208,7 +215,7 @@ function startServer (_service) {
       console.log('using presenter for service')
     }
 
-    console.log(_service.language + ' microcule started at: http://' +  addr.address + ":" + addr.port);
+    console.log(_service.language + ' microcule started at: http://'.blue +  addr.address + ":" + addr.port);
 
     // Remark: Will automatically map the process.env `microcule` was spawned in to the service.env of the spawned function
     config.env = process.env;
@@ -233,9 +240,11 @@ function startServer (_service) {
           spawnService(__service);
         });
         */
+        console.log('1'.red);
         spawnService(requireServiceSync({ path: servicePath }));
       } else {
-        spawnService(_service)
+        console.log('2'.red);
+        spawnService(_service);
       }
 
       function spawnService (service) {
@@ -248,10 +257,12 @@ function startServer (_service) {
             if (err) {
               return next(err);
             }
+            console.log('3'.red);
             microcule.plugins.spawn({
               bin: service.bin,
               argv: service.argv,
               code: service.code,
+              originalCodeFilePath: service.originalCodeFilePath,
               schema: service.schema,
               view: service.view,
               presenter: service.presenter,
@@ -266,10 +277,12 @@ function startServer (_service) {
             });
           });
         } else {
+          console.log('4'.red);
           microcule.plugins.spawn({
             bin: service.bin,
             argv: service.argv,
             code: service.code,
+            originalCodeFilePath: service.originalCodeFilePath,
             schema: service.schema,
             view: service.view,
             presenter: service.presenter,

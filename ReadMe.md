@@ -28,6 +28,7 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
    - coffee-script
    - common lisp
    - bash
+   - dotnet (.NET Core)
    - lua
    - golang
    - ocaml
