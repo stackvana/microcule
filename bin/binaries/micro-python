@@ -16,6 +16,9 @@ def __prepare():
 __prepare()
 del __prepare
 
+# inject microcule WSGI handler code
+code = code + '\nimport microcule\nmicrocule.wsgi(Hook).run(app)\n'
+
 # Execute the code as a string in ( this ) context
 # print(code)
 exec(code)

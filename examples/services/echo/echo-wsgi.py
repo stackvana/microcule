@@ -1,6 +1,5 @@
 import pprint
 import logging
-import microcule
 
 log = logging.getLogger('echo-py')
 
@@ -14,6 +13,3 @@ def app(environ, start_response):
     log.info('hello logs')
     log.warn('%s', Hook['params'])
     return '\n'.join(res)
-
-if __name__ == '__main__':
-    microcule.wsgi(Hook).run(app)
