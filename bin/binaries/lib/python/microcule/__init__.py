@@ -4,7 +4,10 @@ import logging
 import traceback
 import pkg_resources
 import wsgiref.handlers
+import os
 
+# open incoming connection from fd3
+fd3 = os.fdopen(3, 'w+')
 
 class FullMicroculeJSONFormatter(logging.Formatter):
     def format(self, record):
@@ -78,15 +81,18 @@ class MicroculeExceptHook:
                     payload['error'] += error
                 else:
                     payload['error'] = error
-        sys.stderr.write(json.dumps(res)+'\n')
-        sys.stderr.flush()
-        sys.stderr.write(json.dumps({'type': 'statusCode', 'payload': {'value': 500}})+'\n')
-        sys.stderr.flush()
+                    
+                    
+        fd3.write(json.dumps(res)+'\n')
+        fd3.flush()
+        fd3.write(json.dumps({'type': 'statusCode', 'payload': {'value': 500}})+'\n')
+        fd3.flush()
+
         if self.display:
             sys.stdout.write(payload['error'].rstrip('\n')+'\n')
             sys.stdout.flush()
-        sys.stderr.write(json.dumps({'type': 'end'})+'\n')
-        sys.stderr.flush()
+        fd3.write(json.dumps({'type': 'end'})+'\n')
+        fd3.flush()
 
 
 class wsgi(wsgiref.handlers.CGIHandler):
@@ -100,9 +106,11 @@ class wsgi(wsgiref.handlers.CGIHandler):
     def send_headers(self):
         self.cleanup_headers()
         self.headers_sent = True
-        head = {'type': 'writeHead', 'payload': {'code': self.status, 'headers': dict(self.headers)}}
-        sys.stderr.write(json.dumps(head)+'\n')
-        sys.stderr.flush()
+        # remark: the status code needs to be sent to the parent process as an 3 digit integer value, not a string value with label
+        # todo: make parse int code for status more robust.
+        head = {'type': 'writeHead', 'payload': {'code': int(self.status[:3]), 'headers': dict(self.headers)}}
+        fd3.write(json.dumps(head)+'\n')
+        fd3.flush()
 
     def add_cgi_vars(self):
         #assert not Hook['isStreaming'], 'Streaming hooks not yet supported by WSGI gateway'
