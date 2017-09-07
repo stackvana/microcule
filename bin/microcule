@@ -262,7 +262,7 @@ function startServer (_service) {
             })(req, output, function(){
               // if we made it here, it means no services called res.end()
               // we should end the service ( or else it will hang forever )
-              res.end();
+              output.end();
             });
           });
         } else {
