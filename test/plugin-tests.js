@@ -51,7 +51,6 @@ test('attempt to send simple http request to running microservice', function (t)
     method: "GET",
     json: true
   }, function (err, res, body) {
-    console.log("bbb", body)
     t.equal(typeof body, "object", 'got correct response');
     //t.equal(body, "b", "echo'd back property")
     t.end();

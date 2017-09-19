@@ -1,0 +1,1 @@
+Collection of invalid / erroring microservices. Useful for testing error conditions, can be put into unit tests.
