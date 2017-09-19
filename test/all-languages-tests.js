@@ -12,7 +12,7 @@ microcule = require('../');
 // Even as devDependencies they are too big
 // TODO: update tests to use local examples folder for hello world?
 // or should it also include microcule-examples echo tests?
-var languages = ['bash', 'gcc', /* 'babel', 'coffee-script', */ 'smalltalk', 'lua', 'go', 'javascript', 'perl', 'php', 'python', 'python3', 'ruby', 'rust', 'r', 'scheme', 'tcl'];
+var languages = ['bash', 'gcc', /* 'babel', 'coffee-script', */ 'smalltalk', /*'lua',*/ 'go', 'javascript', 'perl', 'php', 'python', /* 'python3', */ 'ruby', 'rust', 'r', 'scheme', 'tcl'];
 
 test('attempt to require microcule-examples module', function (t) {
   examples = require('microcule-examples');
@@ -27,6 +27,8 @@ test('check if examples are available for all languages', function (t) {
   t.end();
 });
 
+return;
+
 //
 // Remark: Travis-Ci is not able to easily support multiple language binaries in a single test
 //         There is a solution available at: https://github.com/travis-ci/travis-ci/issues/4090,
@@ -37,7 +39,6 @@ test('check if examples are available for all languages', function (t) {
 // Note:  The following tests should pass locally if you remove the return,
 //         and you have every single target language binary installed locally
 //
-return;
 
 test('attempt to start server with handlers for all languages', function (t) {
   app = express();
@@ -48,7 +49,7 @@ test('attempt to start server with handlers for all languages', function (t) {
       language: lang,
       code: service.code
     });
-    app.use('/' + lang, handler, function(req, res){
+    app.use('/' + lang, handler, function (req, res) {
       res.end();
     });
     t.equal(typeof handler, "function", "/" + lang + " HTTP endpoint added");
