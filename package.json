@@ -48,23 +48,23 @@
     "tape": "^4.6.0"
   },
   "nyc": {
-     "all": false,
-     "include": [
-       "lib/**/*.js"
-     ],
-     "exclude": [
-       "coverage",
-       "locales",
-       "modules",
-       "reports",
-       "test",
-       "node_modules"
-     ],
-     "reporter": [
-       "html",
-       "lcov",
-       "clover"
-     ],
-     "report-dir": "./reports/coverage"
-   }
+    "all": false,
+    "include": [
+      "lib/**/*.js"
+    ],
+    "exclude": [
+      "coverage",
+      "locales",
+      "modules",
+      "reports",
+      "test",
+      "node_modules"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "clover"
+    ],
+    "report-dir": "./reports/coverage"
+  }
 }
