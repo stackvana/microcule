@@ -283,9 +283,22 @@ if (env.isHookio) {
 }
 
 function _require (module) {
+  // console.log(module, require.paths, process.cwd())
+  // Note: This seems wrong, but we want to require from the path microcule binary is running at
+  // In other cases, we may want to instead fallback to normal node.js lookups ( which are looking for modules in *this* project directory )
+
+  // first look for module in current working directory
+  try {
+    return require(process.cwd() + '/node_modules/' + module);
+  } catch (err) {
+
+  }
+  // if that fails, fallback to normal node.js lookups
   return require(module);
 }
 
+// Note: Do we need to add this back for streaming multipart uploads?
+// TODO: Add tests for multipart file uploads ( may not be working )
 // var psr = require('parse-service-request');
 /*
 psr(process.stdin, output, function (req, res, fields) {
@@ -294,7 +307,6 @@ psr(process.stdin, output, function (req, res, fields) {
     env.params[p] = fields[p];
   }
 */
-
 
 /* TODO: add ability to proxy request parameters to middleware chain
 var proxy = new Proxy(process.stdin, {
