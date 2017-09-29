@@ -12,7 +12,6 @@ var nodeService = function testService (opts) {
 
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
-var bodyParser = require('../lib/plugins/bodyParser');
 var rateLimiter = require('../lib/plugins/rateLimiter');
 var spawn = require('../lib/plugins/spawn');
 
@@ -22,7 +21,6 @@ var handler = spawn({
 });
 
 app.use(logger());
-app.use(bodyParser());
 app.use(mschema({
   "hello": {
     "type": "string",

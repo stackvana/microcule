@@ -3,7 +3,7 @@ var test = require("tape");
 var express = require('express');
 var request = require('request');
 
-var microcule, handler, app, server;
+var microcule, handler, luaHandler, app, server;
 
 microcule = require('../');
 
@@ -11,8 +11,8 @@ test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
   handler = microcule.plugins.spawn({
     language: "javascript",
-    code: function service (service) {
-      service.res.json(service.params);
+    code: function service (req, res) {
+     res.end('responded');
     }
   });
   app.use(handler, function (req, res) {
@@ -24,23 +24,22 @@ test('attempt to start simple http server with spawn handler', function (t) {
   });
 });
 
-test('attempt to send simple http request to running microservice', function (t) {
-  request('http://localhost:3000/', function (err, res, body) {
-    t.equal(body, '{}\n', 'got correct response');
-    t.end();
-  })
-});
+test('attempt to send large amount of JSON data to running microservice', function (t) {
+  
+  // create a large JSON object
+  var obj = {};
+  for (var i = 0; i < 100; i++) {
+    obj[i] = new Buffer(1000).toString()
+  }
 
-test('attempt to send JSON data to running microservice', function (t) {
   request({
     uri: 'http://localhost:3000/',
     method: "POST",
-    json: {
-      a: "b"
-    }
+    json: obj
   }, function (err, res, body) {
-    t.equal(typeof body, "object", 'got correct response');
-    t.equal(body.a, "b", "echo'd back property")
+    // console.log('bbb', body)
+    t.equal(typeof body, "string", 'got correct response type');
+    t.equal(body, "responded\n", 'got correct response');
     t.end();
   })
 });

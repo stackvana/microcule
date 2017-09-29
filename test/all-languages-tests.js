@@ -42,7 +42,6 @@ return;
 
 test('attempt to start server with handlers for all languages', function (t) {
   app = express();
-  app.use(microcule.plugins.bodyParser());
   languages.forEach(function (lang) {
     var service = examples.services[lang + '-hello-world'];
     var handler = microcule.plugins.spawn({

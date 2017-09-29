@@ -40,7 +40,6 @@ var requireServiceSync = require('../lib/requireServiceSync');
 
 var logger = require('../lib/plugins/logger');
 var mschema = require('../lib/plugins/mschema');
-var bodyParser = require('../lib/plugins/bodyParser');
 var viewPresenter = require('../lib/viewPresenter');
 
 var servicePath = path.resolve(process.cwd() + "/" + script);
@@ -214,7 +213,6 @@ function startServer (_service) {
     config.env = process.env;
 
     app.use(logger());
-    app.use(bodyParser());
 
     if (_service.schema) {
       app.use(mschema(_service.schema));

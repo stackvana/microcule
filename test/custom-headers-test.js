@@ -11,8 +11,10 @@ test('attempt to start simple http server with spawn handler', function (t) {
   app = express();
   handler = microcule.plugins.spawn({
     language: "javascript",
-    code: function service (service) {
-      service.res.json(service.params);
+    code: function service (req, res) {
+      res.setHeader('x-custom', 'foo')
+      res.writeHead(404);
+      res.end();
     }
   });
   app.use(handler, function (req, res) {
@@ -24,23 +26,13 @@ test('attempt to start simple http server with spawn handler', function (t) {
   });
 });
 
-test('attempt to send simple http request to running microservice', function (t) {
-  request('http://localhost:3000/', function (err, res, body) {
-    t.equal(body, '{}\n', 'got correct response');
-    t.end();
-  })
-});
-
 test('attempt to send JSON data to running microservice', function (t) {
   request({
     uri: 'http://localhost:3000/',
-    method: "POST",
-    json: {
-      a: "b"
-    }
+    method: "POST"
   }, function (err, res, body) {
-    t.equal(typeof body, "object", 'got correct response');
-    t.equal(body.a, "b", "echo'd back property")
+    t.equal(res.headers['x-custom'], 'foo')
+    t.equal(res.statusCode, 404, 'got correct response');
     t.end();
   })
 });

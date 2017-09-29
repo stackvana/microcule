@@ -5,7 +5,6 @@ var plugins = microcule.plugins;
 
 var nodeService = express();
 nodeService.use(plugins.logger());
-nodeService.use(plugins.bodyParser());
 nodeService.use(plugins.mschema({
   "hello": {
     "type": "string",
@@ -28,7 +27,6 @@ app.use('/node', nodeService);
 
 var bashService = express();
 bashService.use(plugins.logger());
-bashService.use(plugins.bodyParser());
 bashService.use(plugins.mschema({
   "hello": {
     "type": "string",

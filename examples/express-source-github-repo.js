@@ -24,7 +24,6 @@ app.use(sourceGithubRepo({
   main: "python/index.py",
 }));
 
-app.use(bodyParser());
 app.use(mschema({
   "hello": {
     "type": "string",

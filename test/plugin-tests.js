@@ -9,7 +9,6 @@ microcule = require('../');
 
 var logger = microcule.plugins.logger;
 var mschema = microcule.plugins.mschema;
-var bodyParser = microcule.plugins.bodyParser;
 var rateLimiter = microcule.plugins.rateLimiter
 var spawn = microcule.plugins.spawn;
 
@@ -22,7 +21,6 @@ var handler = spawn({
 
 test('attempt to start simple http server with some of the plugins spawn handler', function (t) {
   app = express();
-  app.use(bodyParser());
   app.use(logger());
   app.use(mschema({
     "hello": {

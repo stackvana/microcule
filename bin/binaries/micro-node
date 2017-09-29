@@ -246,17 +246,6 @@ var debug = function debug () {
   return;
 };
 
-/* TODO: implement handlers for IPC messages
-// new IPC stdio[3] communication logic
-// sends IPC message to parent
-function _send (message) {
-  process.send(message);
-}
-process.on('message', function (m){
-  console.log('pmessage ' + JSON.stringify(m));
-});
-*/
-
 var serviceEnv = {};
 
 // Remark: serviceEnv object is used to populate the microservice object passed into your code
@@ -297,80 +286,80 @@ function _require (module) {
   return require(module);
 }
 
-// Note: Do we need to add this back for streaming multipart uploads?
+// Note: psr has been added back to child process, may be required for streaming multipart uploads
 // TODO: Add tests for multipart file uploads ( may not be working )
-// var psr = require('parse-service-request');
-/*
+var psr = require('parse-service-request');
 psr(process.stdin, output, function (req, res, fields) {
 
-  for (var p in fields) {
-    env.params[p] = fields[p];
+  // re-map any potential resource params that have been extracted from the request
+  for (var p in req.resource.params) {
+    env.params[p] = req.resource.params[p];
   }
-*/
 
-/* TODO: add ability to proxy request parameters to middleware chain
-var proxy = new Proxy(process.stdin, {
-  get: function(target, name) {
-    // console.log("Getting pproperty '" + name + "'", env.input[name]);
-     if (!(name in target)) {
-       //console.log("Getting non-existant property '" + name + "'");
-       return undefined;
+  /* TODO: add ability to proxy request parameters to middleware chain
+  var proxy = new Proxy(process.stdin, {
+    get: function(target, name) {
+      // console.log("Getting pproperty '" + name + "'", env.input[name]);
+       if (!(name in target)) {
+         //console.log("Getting non-existant property '" + name + "'");
+         return undefined;
+       }
+       return target[name];
+     },
+     set: function(target, name, value) {
+      //console.log("Setting property '" + name + "', initial value: " + value);
+      if (!(name in target)) {
+        //   console.log("Setting non-existant property '" + name + "', initial value: " + value);
+        pipe3.write(JSON.stringify({ type: "setvar", payload: { key: name, value: value } }));
+      }
+      target[name] = value;
+      return true;
      }
-     return target[name];
+  });
+  */
+
+  /* TODO: add ability to send proxied params back to parent process
+    // sets key value on input stream ( useful for middleware processing later )
+    process.stdin.set = function (key, value) {
+      pipe3.write(JSON.stringify({ type: "setvar", payload: { key: key, value: value } }));
+    };
+  */
+
+  // serviceEnv.req = proxy;
+  serviceEnv.req = process.stdin;
+  serviceEnv.res = output;
+  serviceEnv.env = env.env;
+  serviceEnv.params = env.params;
+  serviceEnv.resource = env.resource;
+  serviceEnv.isStreaming = env.isStreaming;
+  serviceEnv.customTimeout = env.customTimeout;
+  serviceEnv.debug = debug;
+
+  rs({
+    service: code,
+    env: serviceEnv,
+    vm: {
+      console: {
+        log: debug,
+        error: debug
+      },
+      setTimeout: setTimeout,
+     __dirname: __dirname,
+     require: _require,
+     Buffer: Buffer
    },
-   set: function(target, name, value) {
-    //console.log("Setting property '" + name + "', initial value: " + value);
-    if (!(name in target)) {
-      //   console.log("Setting non-existant property '" + name + "', initial value: " + value);
-      pipe3.write(JSON.stringify({ type: "setvar", payload: { key: name, value: value } }));
+   errorHandler: errorHandler
+  })(function (err, result) {
+    // callback / promise API
+    if (err) {
+      errorHandler(err);
     }
-    target[name] = value;
-    return true;
-   }
-});
-*/
-
-/* TODO: add ability to send proxied params back to parent process
-  // sets key value on input stream ( useful for middleware processing later )
-  process.stdin.set = function (key, value) {
-    pipe3.write(JSON.stringify({ type: "setvar", payload: { key: key, value: value } }));
-  };
-*/
-
-// serviceEnv.req = proxy;
-serviceEnv.req = process.stdin;
-serviceEnv.res = output;
-serviceEnv.env = env.env;
-serviceEnv.params = env.params;
-serviceEnv.resource = env.resource;
-serviceEnv.isStreaming = env.isStreaming;
-serviceEnv.customTimeout = env.customTimeout;
-serviceEnv.debug = debug;
-
-rs({
-  service: code,
-  env: serviceEnv,
-  vm: {
-    console: {
-      log: debug,
-      error: debug
-    },
-    setTimeout: setTimeout,
-   __dirname: __dirname,
-   require: _require,
-   Buffer: Buffer
- },
- errorHandler: errorHandler
-})(function (err, result) {
-  // callback / promise API
-  if (err) {
-    errorHandler(err);
-  }
-  // Note: Do not write undefined output
-  if (result) {
-    output.write(result);
-  }
-  // Remark: We are no longed calling output.end() and instead we exit the process
-  // This should allow for services which don't explictly end requests ( like middlewares )
-  process.exit();
+    // Note: Do not write undefined output
+    if (result) {
+      output.write(result);
+    }
+    // Remark: We are no longed calling output.end() and instead we exit the process
+    // This should allow for services which don't explictly end requests ( like middlewares )
+    process.exit();
+  });
 });

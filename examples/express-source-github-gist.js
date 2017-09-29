@@ -23,7 +23,6 @@ app.use(sourceGithubGist({
   gistID: "357645b8a17daeb17458"
 }));
 
-app.use(bodyParser());
 app.use(mschema({
   "hello": {
     "type": "string",
