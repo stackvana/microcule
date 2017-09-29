@@ -25,7 +25,7 @@
     "mkdirp": "^0.5.1",
     "mschema": "^0.5.6",
     "mustache": "^2.2.1",
-    "parse-service-request": "1.2.x",
+    "parse-service-request": "1.3.x",
     "resource-http": "^1.1.0",
     "run-service": "3.x.x",
     "shasum": "^1.0.2",
