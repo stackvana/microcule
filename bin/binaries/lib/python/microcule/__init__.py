@@ -7,7 +7,10 @@ import wsgiref.handlers
 import os
 
 # open incoming connection from fd3
-fd3 = os.fdopen(3, 'w+')
+if sys.version_info[0] < 3:
+  fd3 = os.fdopen(3, 'w+')
+else:
+  fd3 = os.fdopen(3, 'wb+', buffering=0)
 
 class FullMicroculeJSONFormatter(logging.Formatter):
     def format(self, record):
