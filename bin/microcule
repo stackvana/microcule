@@ -207,7 +207,8 @@ function startServer (_service) {
       console.log('using presenter for service')
     }
 
-    console.log(_service.language + ' microcule started at: http://' +  addr.address + ":" + addr.port);
+    var serviceType = _service.language || _service.bin;
+    console.log(serviceType + ' microcule started at: http://' +  addr.address + ":" + addr.port);
 
     // Remark: Will automatically map the process.env `microcule` was spawned in to the service.env of the spawned function
     config.env = process.env;
