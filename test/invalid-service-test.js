@@ -4,6 +4,7 @@ var test = require("tape");
 var express = require('express');
 var request = require('request');
 var fs = require('fs');
+var path = require('path');
 
 var microcule, handlers = {}, app, server;
 
@@ -41,6 +42,17 @@ test('attempt to create multiple invalid spawn handlers', function (t) {
     code: fs.readFileSync(__dirname + '/fixtures/invalid-services/writes-bad-headers.js').toString()
   });
 
+  handlers['missing-command'] = microcule.plugins.spawn({
+    language: "bash",
+    redirectStderrToStdout: true, // shows error in response for non-zero exit codes
+    code: fs.readFileSync(__dirname + '/fixtures/invalid-services/missing-command.sh').toString()
+  });
+
+  handlers['missing-command-silent'] = microcule.plugins.spawn({
+    language: "bash",
+    code: fs.readFileSync(__dirname + '/fixtures/invalid-services/missing-command.sh').toString()
+  });
+
   t.end();
 });
 
@@ -52,6 +64,8 @@ test('attempt to start simple http server with multiple invalid services', funct
   app.use('/require-error', handlers['require-error']);
   app.use('/syntax-error', handlers['syntax-error']);
   app.use('/writes-bad-headers', handlers['writes-bad-headers']);
+  app.use('/missing-command', handlers['missing-command']);
+  app.use('/missing-command-silent', handlers['missing-command-silent']);
 
   // Required for non-js services ( or else response will not end )
   app.use(function(req, res){
@@ -91,6 +105,22 @@ test('attempt to send request to javascript writes-bad-headers', function (t) {
   request('http://localhost:3000/writes-bad-headers', function (err, res, body) {
     t.equal(res.statusCode, 200);
     t.equal(body, '', 'got correct node error');
+    t.end();
+  })
+});
+
+test('attempt to send request to bash - missing command', function (t) {
+  request('http://localhost:3000/missing-command', function (err, res, body) {
+    t.equal(res.statusCode, 500);
+    t.equal(body, path.resolve(__dirname + '/../bin/binaries/micro-bash') + ': line 19: asdasd: command not found\n', 'got correct bash error');
+    t.end();
+  })
+});
+
+test('attempt to send request to bash - missing command - silent stderr', function (t) {
+  request('http://localhost:3000/missing-command-silent', function (err, res, body) {
+    t.equal(res.statusCode, 500);
+    t.equal(body, '', 'got correct empty error response');
     t.end();
   })
 });
