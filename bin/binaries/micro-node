@@ -176,7 +176,7 @@ output.writeHead = function (code, headers) {
 
 // Capture any stream errors
 output.on('error', function (err) {
-  pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
+  pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }) + '\n');
   process.exit();
 });
 
@@ -186,7 +186,7 @@ output.json = function json (data) {
   if (typeof data !== 'undefined') {
     console.log(JSON.stringify(data, true, 2));
   }
-  pipe3.write(JSON.stringify({ type: "end" }));
+  pipe3.write(JSON.stringify({ type: "end" }) + '\n');
   process.exit();
 };
 
@@ -195,15 +195,15 @@ output.end = function end (data) {
   if (typeof data !== 'undefined') {
     console.log(data);
   }
-  pipe3.write(JSON.stringify({ type: "end" }));
+  pipe3.write(JSON.stringify({ type: "end" }) + '\n');
   process.exit();
 };
 
 // Custom errorHandler for `run-service` execution
 function errorHandler (err) {
   if (err) {
-    pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }));
-    process.exit();
+    pipe3.write(JSON.stringify({ type: "error", payload: { error: err.message, code: err.code } }) + '\n');
+    process.exit(1);
   }
 };
 
@@ -242,7 +242,7 @@ var debug = function debug () {
   if (args.length === 1) {
     args = args[0];
   }
-  pipe3.write(JSON.stringify({ type: "log", payload: { entry: args } }));
+  pipe3.write(JSON.stringify({ type: "log", payload: { entry: args } }) + '\n');
   return;
 };
 
