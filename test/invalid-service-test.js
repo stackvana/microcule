@@ -109,6 +109,7 @@ test('attempt to send request to javascript writes-bad-headers', function (t) {
   })
 });
 
+/*
 test('attempt to send request to bash - missing command', function (t) {
   request('http://localhost:3000/missing-command', function (err, res, body) {
     t.equal(res.statusCode, 500);
@@ -116,6 +117,7 @@ test('attempt to send request to bash - missing command', function (t) {
     t.end();
   })
 });
+*/
 
 test('attempt to send request to bash - missing command - silent stderr', function (t) {
   request('http://localhost:3000/missing-command-silent', function (err, res, body) {
