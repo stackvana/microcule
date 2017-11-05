@@ -67,10 +67,16 @@ test('attempt to send simple http request to microservice', function (t) {
 });
 
 test('check metrics for current user', function (t) {
-  t.equal(1, localStore.services['totalHits/tallies'], 'correct totalHits/tallies')
-  t.equal(0, localStore.services['totalRunning/tallies'], 'correct totalRunning/tallies')
-  t.equal(1, localStore.services['hits/anonymous'], 'correct hits/anonymous')
-  t.equal(0, localStore.services['running/anonymous'], 'correct running/anonymous')
+
+  t.equal(localStore.services['/system/report'].totalHits, 1, 'correct total hits - system report')
+  t.equal(localStore.services['/system/report'].running, 0, 'correct currently running- system report')
+
+  t.equal(localStore.services['/anonymous/echo/report'].totalHits, 1, 'correct total hits - service report')
+  t.equal(localStore.services['/anonymous/echo/report'].running, 0, 'correct currently running- service report')
+
+  t.equal(localStore.services['/anonymous/report'].totalHits, 1, 'correct total hits - user report')
+  t.equal(localStore.services['/anonymous/report'].running, 0, 'correct currently running- user report')
+
   t.end();
 });
 
@@ -85,13 +91,21 @@ test('attempt to send simple http request to microservice that never responds', 
   })
 });
 
+
 test('check metrics for current user', function (t) {
-  t.equal(2, localStore.services['totalHits/tallies'], 'correct totalHits/tallies')
-  t.equal(0, localStore.services['totalRunning/tallies'], 'correct totalRunning/tallies')
-  t.equal(2, localStore.services['hits/anonymous'], 'correct hits/anonymous')
-  t.equal(0, localStore.services['running/anonymous'], 'correct running/anonymous')
+
+  t.equal(localStore.services['/system/report'].totalHits, 2, 'correct total hits - system report')
+  t.equal(localStore.services['/system/report'].running, 0,  'correct currently running- system report')
+
+  t.equal(localStore.services['/anonymous/neverResponds/report'].totalHits, 1, 'correct total hits - service report')
+  t.equal(localStore.services['/anonymous/neverResponds/report'].running, 0, 'correct currently running- service report')
+
+  t.equal(localStore.services['/anonymous/report'].totalHits, 2, 'correct total hits - user report')
+  t.equal(localStore.services['/anonymous/report'].running, 0, 'correct currently running- user report')
+
   t.end();
 });
+
 
 test('attempt to end server', function (t) {
   server.close(function(){
