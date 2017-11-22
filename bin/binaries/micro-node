@@ -131,6 +131,18 @@ output.sendDate = function (value) {
   pipe3.write(JSON.stringify(message) + '\n');
 };
 
+
+output.status = function (value) {
+  var message = {
+    "type": "status",
+    "payload": {
+      "value": value
+    }
+  };
+  pipe3.write(JSON.stringify(message) + '\n');
+};
+
+
 output.statusMessage = function (value) {
   var message = {
     "type": "statusMessage",
