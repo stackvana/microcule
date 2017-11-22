@@ -12,7 +12,7 @@ microcule = require('../');
 // Even as devDependencies they are too big
 // TODO: update tests to use local examples folder for hello world?
 // or should it also include microcule-examples echo tests?
-var languages = ['bash', 'gcc', /* 'babel', 'coffee-script', */ 'smalltalk', /*'lua',*/ 'go', 'javascript', 'perl', 'php', 'python', /* 'python3', */ 'ruby', 'rust', 'r', 'scheme', 'tcl'];
+var languages = ['bash', 'gcc', 'coffee-script', /* 'babel', , */ 'smalltalk', /*'lua',*/ 'go', 'javascript', 'perl', 'php', 'python', /* 'python3', */ 'ruby', 'rust', 'r', 'scheme', 'tcl'];
 
 test('attempt to require microcule-examples module', function (t) {
   examples = require('microcule-examples');
@@ -94,6 +94,8 @@ test('attempt to run hello world all languages', function (t) {
     t.end();
   });
 });
+
+
 // TODO: request params test with JSON / language specific output
 
 test('attempt to end server', function (t) {

@@ -1,4 +1,4 @@
-// invalid-service-tests.js
+// invalid-service-test.js
 // attempts to run several user-defined services which may error in unique ways
 var test = require("tape");
 var express = require('express');
@@ -87,6 +87,7 @@ test('attempt to send request to javascript missing-exports service', function (
 
 test('attempt to send request to javascript never-responds', function (t) {
   request('http://localhost:3000/never-responds', function (err, res, body) {
+    // timeouts return 200 instead of 500
     // t.equal(res.statusCode, 500);
     t.equal(res.statusCode, 200);
     t.equal(body.substr(0, 7), 'Timeout', 'got timeout response');

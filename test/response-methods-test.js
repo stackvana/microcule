@@ -43,7 +43,6 @@ test('attempt to start simple http server with spawn handler', function (t) {
     res.end();
   });
 
-
   server = app.listen(3000, function () {
     t.equal(typeof handler, "function", "started HTTP microservice server");
     t.end();

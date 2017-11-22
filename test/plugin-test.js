@@ -1,4 +1,4 @@
-// basic-tests.js
+// plugin-test.js
 var test = require("tape");
 var express = require('express');
 var request = require('request');
