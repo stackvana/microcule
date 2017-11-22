@@ -19,7 +19,7 @@ app.use(logger());
 // source from github repo
 app.use(sourceGithubRepo({
   token: "1234",
-  repo: "microculevana/microservice-examples",
+  repo: "stackvana/microcule-examples",
   branch: "master",
   main: "python/index.py",
 }));
