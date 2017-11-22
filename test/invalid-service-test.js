@@ -87,7 +87,8 @@ test('attempt to send request to javascript missing-exports service', function (
 
 test('attempt to send request to javascript never-responds', function (t) {
   request('http://localhost:3000/never-responds', function (err, res, body) {
-    t.equal(res.statusCode, 500);
+    // t.equal(res.statusCode, 500);
+    t.equal(res.statusCode, 200);
     t.equal(body.substr(0, 7), 'Timeout', 'got timeout response');
     t.end();
   })
@@ -109,7 +110,6 @@ test('attempt to send request to javascript writes-bad-headers', function (t) {
   })
 });
 
-/*
 test('attempt to send request to bash - missing command', function (t) {
   request('http://localhost:3000/missing-command', function (err, res, body) {
     t.equal(res.statusCode, 500);
@@ -117,7 +117,6 @@ test('attempt to send request to bash - missing command', function (t) {
     t.end();
   })
 });
-*/
 
 test('attempt to send request to bash - missing command - silent stderr', function (t) {
   request('http://localhost:3000/missing-command-silent', function (err, res, body) {
