@@ -1,5 +1,7 @@
 var microcule = {};
 
+microcule.config = require('./config');
+
 microcule.requireService = require('./lib/requireService');
 microcule.requireServiceSync = require('./lib/requireServiceSync');
 
