@@ -1,6 +1,9 @@
 var fs = require('fs');
 
 module.exports = {
+  bash: {
+    version: 3
+  },
   http: {
     port: 3000,
     host: "0.0.0.0",

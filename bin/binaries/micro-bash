@@ -1,8 +1,12 @@
 #!/bin/sh
 
-# basic support for bash scripts
-# TODO: replace with better argument parsing function
+# Note: Using Bash version 4 or higher will give access to bash associative arrays
+#       Bash 3 version is used by default. Updating the configuration file is required for bash 4 functionality
+#
 
+# basic support for bash scripts
+
+# TODO: replace with better argument parsing function
 _CODE=$2
 _INJECT=$6
 
