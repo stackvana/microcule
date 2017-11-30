@@ -73,7 +73,7 @@ If you are using Amazon Lambda or other cloud function hosting services like Goo
 
 ## Enterprise Ready
 
-This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and it's largest installation is now managing 8000+ microservices.
+This project is the component which several production services, including [hook.io](http://hook.io), use to spawn real-time arbitrary streaming microservices in response to streaming HTTP requests. It's been battle-hardened with over two years of development and it's largest installation is now managing over 11,0000 microservices.
 
 You are encouraged to use this module as-is, or modify it to suite your needs. If you are interested in contributing please let us know by opening a Pull Request.
 
@@ -88,7 +88,7 @@ Only require the functionality you need.
 ### Universal
 
  - Supports Serverless functions in 20 programming languages! ( and counting )
- - Supports Serverless with standard Unix or Linux tools ( like `ls`, `echo`, or `tail -f` )
+ - Supports Serverless with standard Unix or Linux tools ( like `ls`, `echo`, or `tail` )
  - Full support for mapping HTTP -> STDIO streams
  - Unix first. No custom APIs or buffered context
 
@@ -116,7 +116,7 @@ Even binary data works great! Here is an example of resizing in image in [JavaSc
 
  - Ships with `microcule` binary for starting HTTP microservice servers
  - Scripting support for HTTP request / response API ( differs per language )
- - Can serve any arbitrary binary like `echo`, `ls`, and `tail -f` as streaming HTTP microservices
+ - Can serve any arbitrary binary like `echo`, `ls`, and `tail` as streaming HTTP microservices
  - Can optionally accept STDIN and process scripts with Unix style pipes ( useful for using functions in DevOps! )
 
 ### Extendable
@@ -208,7 +208,7 @@ These same examples are available as live services at [hook.io/examples](https:/
 
 microcule echo "hello world"
 microcule cat ReadMe.md
-microcule tail -f ReadMe.md
+microcule tail ReadMe.md
 
 # start HTTP servers with mounted streaming functions directly from source files
 
@@ -424,7 +424,7 @@ All errors that can possibly happen during the execution of a microservice shoul
 
 `microcule` cannot make any guarantees about the isolation of the server or spawned processes.  All microservices will have default access to the server's file-system and child processes.
 
-To ensure isolation of the server file-system, you would want to use the `microcule` binary in a `chroot` jail, or another similar container solution.
+To ensure isolation of the server file-system, you would want to use the `microcule` binary in a `chroot` jail, or another similar solution like `nsjail`.
 
 To ensure isolation of the server memory and cpu, you will want to use the `microcule` binary in a virtualized environment capable of monitoring and managing resource usage per process.
 
