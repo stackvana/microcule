@@ -7,17 +7,10 @@ var handler = microcule.plugins.spawn({
   argv: ['hello', 'world']
 });
 
-// tail the ReadMe.md file
-// any changes to ReadMe.md in root of project will stream to client
-/*
 var handler = microcule.plugins.spawn({
-  bin: 'tail',
-  argv: ['-f', 'ReadMe.md'],
-  config: {
-    SERVICE_MAX_TIMEOUT: 60000
-  }
+  bin: 'sh',
+  argv: ['-c', 'echo "foo" | cat']
 });
-*/
 
 // spawn simple ls command to show current directories
 /*

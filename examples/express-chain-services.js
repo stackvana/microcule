@@ -19,17 +19,20 @@ var bashService = 'echo "hello bash"'
 
 var handlerA = microcule.plugins.spawn({
   code: nodeService,
-  language: "javascript"
+  language: "javascript",
+  chain: true
 });
 
 var handlerB = microcule.plugins.spawn({
   code: nodeServiceB,
-  language: "javascript"
+  language: "javascript",
+  chain: true
 });
 
 var bashHandler = microcule.plugins.spawn({
   code: bashService,
-  language: "bash"
+  language: "bash",
+  chain: true
 });
 
 

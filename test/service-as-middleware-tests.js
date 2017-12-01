@@ -15,6 +15,7 @@ test('attempt to create a few chainable microservice spawn handlers', function (
 
   handlers['basicAuth'] = microcule.plugins.spawn({
     language: "javascript",
+    chain: true,
     code: function (req, res, next) {
       var auth = require('basic-auth')
       var credentials = auth(req)
@@ -31,10 +32,12 @@ test('attempt to create a few chainable microservice spawn handlers', function (
 
   handlers['write-a'] = microcule.plugins.spawn({
     language: "bash",
-    code: 'echo "a"'
+    code: 'echo "a"',
+    chain: true
   });
   handlers['write-b'] = microcule.plugins.spawn({
     language: "javascript",
+    chain: true,
     code: function (req, res, next) {
       res.write('b\n');
       next(); // call next() to indicate this services is not going to explictly end the response
@@ -42,7 +45,8 @@ test('attempt to create a few chainable microservice spawn handlers', function (
   });
   handlers['write-c'] = microcule.plugins.spawn({
     language: "bash",
-    code: 'echo "c"'
+    code: 'echo "c"',
+    chain: true
   });
   t.end();
 });

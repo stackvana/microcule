@@ -334,6 +334,8 @@ Since `v5.1.0` and above, `microcule` is able to compose multiple functions toge
 
 In order to chain multiple services, simply call them as standard Node.js middlewares in the order you want them to execute.
 
+Note: You must specify the `chain` parameter of `spawn()` as `true`, or else microcule will automatically end the response after the first middleware executes.
+
 ```js
 app.use([logger(), basicAuthHandler, bashServiceHandler, nodeServiceHandlerA, nodeServiceHandlerB], function (req, res) {
   console.log("No services ended response, made it to end");
