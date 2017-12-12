@@ -268,13 +268,14 @@ var serviceEnv = {};
 if (env.isHookio) {
 
   var sdk = require('hook.io-sdk');
-  var dev = {
-    host: "0.0.0.0",
-    port: 9999,
-    protocol: "http://",
+  var clientConfig = {
+    host: "hook.io",
+    port: 443,
+    protocol: "https://",
+    uri: "https://hook.io",
     hook_private_key: env.hookAccessKey
   }
-  var client = sdk.createClient(dev);
+  var client = sdk.createClient(clientConfig);
   serviceEnv.client = client;
   serviceEnv.datastore = client.datastore;
   serviceEnv.keys = client.keys;
