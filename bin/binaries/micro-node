@@ -55,14 +55,6 @@ try {
 // pipe3 is an additional STDIO pipe we can use for HTTP response methods, debugging events, logging events, and other out of band comms
 var pipe3 = new net.Socket({ fd: 3 });
 
-// babel support for es6 / es7
-// the spawned child needs regenerator run-time here
-if (service.language === "babel" || service.language === "es7") {
-  // service is es6+, so convert it to normal javascript
-  // TODO: This may cause peformance issues, could be better to cache transpile of code or use updated node binary with flag
-  require("babel-polyfill");
-}
-
 var rs = require('run-service');
 
 // create a new writable stream to wrap / handle STDOUT

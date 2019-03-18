@@ -24,7 +24,6 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
    - c ( with `gcc` )
    - java
    - javascript ( first-class support )
-   - babel ( ES6 / ES7 / etc ... )
    - coffee-script
    - common lisp
    - bash
@@ -213,7 +212,7 @@ microcule tail ReadMe.md
 # start HTTP servers with mounted streaming functions directly from source files
 
 microcule ./examples/services/echo/echo.js
-microcule -l babel ./examples/services/echo/echo-es6-async.js
+microcule ./examples/services/echo/echo-async-await.js
 microcule ./examples/services/echo/echo.sh
 microcule ./examples/services/echo/echo.c
 microcule ./examples/services/echo/echo.go
@@ -253,9 +252,7 @@ Each call to `microcule` will automatically start a listening HTTP server on por
 
 Service target language is automatically detected based on the file extension of the service. This can be overridden using the `--language` option. 
 
-*Note: For certain languages ( such as Babel ), the first microservice request to `microcule` may take additional time as it will perform an initial compile and cache step.*
-
-*Note: Please see [Babel Support](#babel) for additional Babel configuration*
+*Note: For certain languages ( such as Coffeescript ), the first microservice request to `microcule` may take additional time as it will perform an initial compile and cache step.*
 
 
 ### Node Middleware Usage
