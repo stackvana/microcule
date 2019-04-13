@@ -9,8 +9,9 @@ microcule = require('../');
 
 var logger = microcule.plugins.logger;
 var mschema = microcule.plugins.mschema;
-var rateLimiter = microcule.plugins.rateLimiter
+var RateLimiter = microcule.plugins.RateLimiter;
 var spawn = microcule.plugins.spawn;
+var rateLimiter = new RateLimiter();
 
 var handler = spawn({
   language: "javascript",
@@ -29,10 +30,15 @@ test('attempt to start simple http server with some of the plugins spawn handler
     }
   }));
   
-  app.use(rateLimiter({
+  app.use(rateLimiter.middle({
     maxLimit: 1000,
     maxConcurrency: 2
   }));
+
+  rateLimiter.registerService({
+    owner: 'anonymous',
+    name: ''
+  });
 
   app.use(handler, function (req, res) {
     res.end();

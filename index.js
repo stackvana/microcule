@@ -10,7 +10,7 @@ microcule.plugins = {
   "compile": require('./lib/plugins/compile'),
   "logger": require('./lib/plugins/logger'),
   "mschema": require('./lib/plugins/mschema'),
-  "rateLimiter": require('./lib/plugins/rateLimiter'),
+  "RateLimiter": require('./lib/plugins/rateLimiter'),
   "sourceGithubGist": require('./lib/plugins/sourceGithubGist'),
   "sourceGithubRepo": require('./lib/plugins/sourceGithubRepo'),
   "spawn": require('./lib/plugins/spawn')

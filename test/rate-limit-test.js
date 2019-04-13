@@ -9,7 +9,7 @@ microcule = require('../');
 
 var logger = microcule.plugins.logger;
 var mschema = microcule.plugins.mschema;
-var rateLimiter = microcule.plugins.rateLimiter
+var RateLimiter = microcule.plugins.RateLimiter;
 var spawn = microcule.plugins.spawn;
 
 var handler = spawn({
@@ -34,10 +34,13 @@ var localStore = new Store('memory', 'Rate-Limiter');
 test('attempt to start simple http server with rate limiter plugin', function (t) {
   app = express();
 
-  app.use(rateLimiter({
-    maxLimit: 1000,
-    maxConcurrency: 2,
+  var rateLimiter = new RateLimiter({
     provider: localStore
+  });
+
+  app.use(rateLimiter.middle({
+    maxLimit: 1000,
+    maxConcurrency: 2
   }));
 
   app.use('/echo', handler, function (req, res) {
@@ -48,23 +51,47 @@ test('attempt to start simple http server with rate limiter plugin', function (t
     res.end();
   });
 
+  rateLimiter.registerService({
+    owner: 'anonymous',
+    name: 'echo'
+  });
+
+  rateLimiter.registerService({
+    owner: 'anonymous',
+    name: 'neverResponds'
+  });
+
   server = app.listen(3000, function () {
     t.equal(typeof handler, "function", "started HTTP microservice server");
     t.end();
   });
 });
 
-test('attempt to send simple http request to microservice', function (t) {
+test('attempt to send simple http request to a registered microservice', function (t) {
   request({
     uri: 'http://localhost:3000/echo',
     method: "GET",
     json: true
   }, function (err, res, body) {
+    t.equal(res.statusCode, 200);
     t.equal(typeof body, "object", 'got correct response');
-    //t.equal(body, "b", "echo'd back property")
     t.end();
   })
 });
+
+test('attempt to send simple http request to an unregistered microservice', function (t) {
+  request({
+    uri: 'http://localhost:3000/echo-unknown',
+    method: "GET",
+    json: true
+  }, function (err, res, body) {
+    t.equal(typeof body, "object", 'got correct response');
+    t.equal(body.error, true);
+    t.equal(res.statusCode, 404);
+    t.end();
+  })
+});
+
 
 test('check metrics for current user', function (t) {
 
