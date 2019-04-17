@@ -87,7 +87,7 @@ test('attempt to send simple http request to an unregistered microservice', func
   }, function (err, res, body) {
     t.equal(typeof body, "object", 'got correct response');
     t.equal(body.error, true);
-    t.equal(res.statusCode, 404);
+    t.equal(res.statusCode, 410);
     t.end();
   })
 });
