@@ -85,9 +85,7 @@ test('attempt to send simple http request to an unregistered microservice', func
     method: "GET",
     json: true
   }, function (err, res, body) {
-    t.equal(typeof body, "object", 'got correct response');
-    t.equal(body.error, true);
-    t.equal(res.statusCode, 410);
+    t.equal(res.statusCode, 500);
     t.end();
   })
 });
@@ -153,7 +151,7 @@ test('attempt to send simple http request to a registered microservice - rate li
     method: "GET",
     json: true
   }, function (err, res, body) {
-    t.equal(res.statusCode, 410);
+    t.equal(res.statusCode, 500);
     t.equal(res.headers['x-ratelimit-limit'], '2');
     t.equal(res.headers['x-ratelimit-remaining'], '0');
     // Currently can't see amount running header when total limit has been exceeded ( could be fixed later )

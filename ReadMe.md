@@ -44,7 +44,6 @@ see: [100+ Working Service Examples](https://github.com/stackvana/microcule-exam
  - [Plugins](#plugins)
    - Body Parser
    - Compiler
-   - Cron Scheduler
    - Logger
    - Rate limiter
    - Mschema Request Validator
