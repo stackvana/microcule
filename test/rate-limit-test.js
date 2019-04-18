@@ -39,7 +39,7 @@ test('attempt to start simple http server with rate limiter plugin', function (t
   });
 
   app.use(rateLimiter.middle({
-    maxLimit: 1000,
+    maxLimit: 2,
     maxConcurrency: 2
   }));
 
@@ -92,7 +92,6 @@ test('attempt to send simple http request to an unregistered microservice', func
   })
 });
 
-
 test('check metrics for current user', function (t) {
 
   t.equal(localStore.services['/system/report'].totalHits, 1, 'correct total hits - system report')
@@ -133,6 +132,35 @@ test('check metrics for current user', function (t) {
   t.end();
 });
 
+test('attempt to send simple http request to a registered microservice', function (t) {
+  request({
+    uri: 'http://localhost:3000/echo',
+    method: "GET",
+    json: true
+  }, function (err, res, body) {
+    t.equal(res.statusCode, 200);
+    t.equal(res.headers['x-ratelimit-limit'], '2');
+    t.equal(res.headers['x-ratelimit-remaining'], '0');
+    t.equal(res.headers['x-ratelimit-running'], '0');
+    t.equal(typeof body, "object", 'got correct response');
+    t.end();
+  })
+});
+
+test('attempt to send simple http request to a registered microservice - rate limit exceeded', function (t) {
+  request({
+    uri: 'http://localhost:3000/echo',
+    method: "GET",
+    json: true
+  }, function (err, res, body) {
+    t.equal(res.statusCode, 410);
+    t.equal(res.headers['x-ratelimit-limit'], '2');
+    t.equal(res.headers['x-ratelimit-remaining'], '0');
+    // Currently can't see amount running header when total limit has been exceeded ( could be fixed later )
+    // t.equal(res.headers['x-ratelimit-running'], '0');
+    t.end();
+  })
+});
 
 test('attempt to end server', function (t) {
   server.close(function(){
