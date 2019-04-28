@@ -39,7 +39,7 @@ test('attempt to start simple http server with rate limiter plugin', function (t
   });
 
   app.use(rateLimiter.middle({
-    maxLimit: 2,
+    maxLimit: 3,
     maxConcurrency: 2
   }));
 
@@ -137,8 +137,8 @@ test('attempt to send simple http request to a registered microservice', functio
     json: true
   }, function (err, res, body) {
     t.equal(res.statusCode, 200);
-    t.equal(res.headers['x-ratelimit-limit'], '2');
-    t.equal(res.headers['x-ratelimit-remaining'], '0');
+    t.equal(res.headers['x-ratelimit-limit'], '3');
+    t.equal(res.headers['x-ratelimit-remaining'], '1');
     t.equal(res.headers['x-ratelimit-running'], '0');
     t.equal(typeof body, "object", 'got correct response');
     t.end();
@@ -152,7 +152,7 @@ test('attempt to send simple http request to a registered microservice - rate li
     json: true
   }, function (err, res, body) {
     t.equal(res.statusCode, 500);
-    t.equal(res.headers['x-ratelimit-limit'], '2');
+    t.equal(res.headers['x-ratelimit-limit'], '3');
     t.equal(res.headers['x-ratelimit-remaining'], '0');
     // Currently can't see amount running header when total limit has been exceeded ( could be fixed later )
     // t.equal(res.headers['x-ratelimit-running'], '0');
