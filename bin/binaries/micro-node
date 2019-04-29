@@ -294,13 +294,14 @@ function _require (module) {
 // Note: psr has been added back to child process, may be required for streaming multipart uploads
 // TODO: Add tests for multipart file uploads ( may not be working )
 var psr = require('parse-service-request');
+
 psr(process.stdin, output, function (req, res, fields) {
 
   // re-map any potential resource params that have been extracted from the request
   for (var p in req.resource.params) {
     env.params[p] = req.resource.params[p];
   }
-
+  process.stdin.body = env.params;
   /* TODO: add ability to proxy request parameters to middleware chain
   var proxy = new Proxy(process.stdin, {
     get: function(target, name) {
